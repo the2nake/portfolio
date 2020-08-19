@@ -1,9 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&family=Open+Sans&display=swap');
+
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Open Sans', sans-serif;
     background-color: white;
-    width: 56%;
-    margin-left: auto;
-    margin-right: auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Lato', sans-serif;
 }
 
 section {
@@ -18,40 +21,6 @@ section:first-of-type {
     margin-top: 0;
 }
 
-section.with-demo-left {
-    width: calc(60% - 24px - 6px);
-    float: left;
-    clear: left;
-}
-
-section.with-demo-right {
-    width: calc(60% - 24px - 6px);
-    float: right;
-    clear: right;
-}
-
-.demo-left {
-    background-color: rgba(0, 0, 0, 0.01);
-    border: 2px solid rgba(0, 0, 0, 0.0);
-    border-radius: 4px;
-    padding: 12px;
-    margin: 12px 0;
-    width: calc(40% - 24px - 12px);
-    float: left;
-    clear: left;
-}
-
-.demo-right {
-    background-color: rgba(0, 0, 0, 0.01);
-    border: 2px solid rgba(0, 0, 0, 0.0);
-    border-radius: 4px;
-    padding: 12px;
-    margin: 12px 0;
-    width: calc(40% - 24px - 12px);
-    float: right;
-    clear: right;
-}
-
 a {
     color: orange;
     text-decoration: none;
@@ -61,42 +30,77 @@ a:visited {
     color: orangered;
 }
 
-.demo {
-    float: left;
+.demo-left, .demo-right {
+    width: 100%;
+    border-radius: 8px;
 }
 
 .download-button {
-    text-decoration: none;
-    padding: 12px;
-    display: inline-block;
-    margin: 0 8px 0 8px;
-    padding-left: 36px;
-    background-color: aquamarine;
-    border-radius: 4px;
-    border: none;
-    font-family: Arial, Helvetica, sans-serif;
-    color: black !important;
     background-image: url("../images/download.svg#arrow-with-bar");
-    background-repeat: no-repeat;
-    background-position: 12px;
 }
 
 .web-button {
+    background-image: url("../images/cloud.png");
+}
+
+.web-button, .download-button {
     text-decoration: none;
     padding: 12px;
     display: inline-block;
-    margin: 0 8px 0 8px;
+    margin: 8px;
     padding-left: 36px;
     background-color: aquamarine;
     border-radius: 4px;
     border: none;
     font-family: Arial, Helvetica, sans-serif;
     color: black !important;
-    background-image: url("../images/cloud.png");
     background-repeat: no-repeat;
     background-position: 12px;
 }
 
 .download-button:hover, .web-button:hover {
     filter: drop-shadow(0 0 5px white);
+}
+
+@media only screen and (min-width: 1200px) {
+    body {
+        width: 62%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media only screen and (min-width: 900px) {
+
+    section.with-demo-left {
+        width: calc(60% - 24px - 6px);
+        float: left;
+        clear: left;
+    }
+    
+    section.with-demo-right {
+        width: calc(60% - 24px - 6px);
+        float: right;
+        clear: right;
+    }
+    
+    .demo-left, .demo-right {
+        /*background-color: rgba(0, 0, 0, 0.01);
+        padding: 12px;
+        border: 2px solid rgba(0, 0, 0, 0.0);*/
+        border-radius: 8px;
+        margin: 24px 12px;
+        width: calc(40% - 24px - 12px);
+        box-shadow: 0px 0px 0px 12px rgba(0, 0, 0, 0.01);
+    }
+
+    .demo-left {
+        float: left;
+        clear: left;
+    }
+    
+    .demo-right {
+        float: right;
+        clear: right;
+    }
 }
