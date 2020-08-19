@@ -3,7 +3,7 @@
 body {
     font-family: 'Lato', sans-serif;
     background-color: white;
-    font-size: 21px;
+    font-size: 21px !important;
     line-height: 1.4;
 }
 
@@ -64,7 +64,7 @@ a:visited {
     filter: drop-shadow(0 0 5px white);
 }
 
-@media only screen and (min-width: 11in) {
+@media only screen and (min-width: 1440px) {
     body {
         width: 62%;
         margin-left: auto;
