@@ -3,7 +3,8 @@
 body {
     font-family: 'Lato', sans-serif;
     background-color: white;
-    font-size: 16px;
+    font-size: 0.5cm;
+    line-height: 1.4;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -63,7 +64,7 @@ a:visited {
     filter: drop-shadow(0 0 5px white);
 }
 
-@media only screen and (min-width: 1200px) {
+@media only screen and (min-width: 11in) {
     body {
         width: 62%;
         margin-left: auto;
