@@ -87,9 +87,6 @@ a:visited {
     }
     
     .demo-left, .demo-right {
-        /*background-color: rgba(0, 0, 0, 0.01);
-        padding: 12px;
-        border: 2px solid rgba(0, 0, 0, 0.0);*/
         border-radius: 8px;
         margin: 24px 12px;
         width: calc(40% - 24px - 12px);
@@ -106,3 +103,4 @@ a:visited {
         clear: right;
     }
 }
+/**/
