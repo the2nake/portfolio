@@ -1,57 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>My Portfolio</title>
-        <link type="text/css" rel="stylesheet" href="styles/styles.css" />
-        
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">        
-    </head>
-    <body>
-        <section>
-            <p>Hello! I am Thuong, and I am an aspiring programmer. Below is a showcase of my works. Each work will be dated in DD-MM-YYYY format and have a description. Please note that some of these I have made a long time ago, so they may not be as well-made as my more current project. Please feel free to contact me at <a href="mailto:vot@ismanila.org">vot at ismanila dot org</a> if you have any suggestions. Constructive criticism is welcome, spam or hateful comments are not. Fork me on Github: <a href="https://github.com/the2nake">the2nake on github.com</a>.</p>
-        </section>
-        <!--    <pre>
+
+<head>
+    <title>My Portfolio</title>
+    <link type="text/css" rel="stylesheet" href="styles/styles.css" />
+
+    <meta charset="utf-8">
+    <meta name="author" content="Thuong">
+    <meta name="description" content="Thuong's Programming Portfolio">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <section id="return">
+        <p>Return to site: <a href="https://the2nake.github.io/">here</a></p>
+    </section>
+    <section>
+        <p>I am Thuong, and I am an aspiring programmer. Below is a showcase of my works. Each work will be dated in
+            DD-MM-YYYY format and have a description. Please feel free to contact me at <a
+                href="mailto:vot@ismanila.org">vot at ismanila dot org</a> if you have any suggestions. Constructive
+            criticism is welcome, spam or hateful comments are not. Fork me on Github at <a
+                href="https://github.com/the2nake">the2nake on github.com</a>.</p>
+    </section>
+    <!--<pre>
 <code>
     &lt;body>
         &lt;p>This should not be here&lt;/p>
     &lt;/body>
 </code>
         </pre>-->
-        
-        <video controls class="demo-right">
-            <source src="videos/space-exploration-video.mp4">
-        </video>
-        <section class="with-demo-left">
-            <h2>Online space game with JavaScript</h2>
-            <h3>Made on: 15-05-2020</h3>
-            <p>A spin-off of asteroids, this is my first project using prototype-based object-oriented programming. This new syntax was, as first, difficult to grasp. However, it showed all the same benefits as a classical object-oriented style. I made liberal use of inheritance and subclasses to reuse code. JavaScript does not allow for multiple inheritance, so it was much easier coding knowing that some method and attribute conflicts could not happen. A major feature to this program was the ability to download all the assets before playing the game, instead of loading on-demand, which can take a toll on devices with slow internet connectivity. This was the first loader I built, and I am very happy with the modular functionality that it provides, which I can use in other projects as well.</p>
-            <a class="web-button" href="https://the2nake.github.io/space-exploration">the2nake.github.io/space-exploration</a>
-        </section>
 
-        <video controls class="demo-left">
-            <source src="videos/asteroids-video.mp4">
-        </video>
-        <section class="with-demo-right">
-            <h2>Asteroids game using python</h2>
-            <h3>Made on: 30-03-2020</h3>
-            <p>This is a simple asteroid clone, developed on Python with turtle and tkinter, used for graphics and UI, respectively. This project was my first time writing code in a classical object-oriented style. I used classes extensively, and almost everything was sorted in hierarchies. This made code reuse much simpler, and allowed me to store all the objects in one list, each with similar methods instead of needing to manage many lists, which is much more difficult and confusing. Recursive functions were immensely helpful in this project, as they mimicked multiple loops running simultaneously without having to use threads.</p>
-            <a class="download-button" href="files/asteroids.zip">Windows</a>
-            <a class="download-button" href="files/asteroids-source.zip">Source code</a>
+    <video controls class="demo-right">
+        <source src="videos/space-exploration-video.mp4">
+    </video>
+    <section class="with-demo-left">
+        <h2>Online space game with JavaScript</h2>
+        <h3>Project time: 1 month. Completed on: 05-2020</h3>
+        <p>A spin-off of asteroids, this is my first project using prototype-based object-oriented programming. This new
+            syntax was, as first, difficult to grasp. However, it showed all the same benefits as a classical
+            object-oriented style. I made liberal use of inheritance and subclasses to reuse code. JavaScript does not
+            allow for multiple inheritance, so it was much easier coding knowing that some method and attribute
+            conflicts could not happen. A major feature to this program was the ability to download all the assets
+            before playing the game, instead of loading on-demand, which can take a toll on devices with slow internet
+            connectivity. This was the first loader I built, and I am very happy with the modular functionality that it
+            provides, which I can use in other projects as well.</p>
+        <a class="web-button"
+            href="https://the2nake.github.io/space-exploration">the2nake.github.io/space-exploration</a>
+    </section>
 
-        </section>
+    <video controls class="demo-left">
+        <source src="videos/asteroids-video.mp4">
+    </video>
+    <section class="with-demo-right">
+        <h2>Asteroids game using python</h2>
+        <h3>Project time: 3.5 weeks. Completed on: 30-03-2020</h3>
+        <p>This is a simple asteroid clone, developed on Python with turtle and tkinter, used for graphics and UI,
+            respectively. This project was my first time writing code in a classical object-oriented style. I used
+            classes extensively, and almost everything was sorted in hierarchies. This made code reuse much simpler, and
+            allowed me to store all the objects in one list, each with similar methods instead of needing to manage many
+            lists, which is much more difficult and confusing. Recursive functions were immensely helpful in this
+            project, as they mimicked multiple loops running simultaneously without having to use threads.</p>
+        <a class="download-button" href="files/asteroids.zip">Windows</a>
+        <a class="download-button" href="files/asteroids-source.zip">Source code</a>
 
-        <video controls class="demo-right">
-            <source src="videos/pong-video.mp4">
-        </video>
-        <section class="with-demo-left">
-            <h2>Pong game using python</h2>
-            <h3>Made on: 05-03-2020</h3>
-            <p>An imitation of one of the first video games, this is my first game using python graphics. I experimented with turtle graphics and pygame mixer, while applying various areas of mathematics such as Cartesian coordinates, right-triangle trigonometry, and varying rates of change. I also used my knowledge about physics to create smooth, realistic motion (however, there are far too many asteroids onscreen for this to use this technique for them). While creating this game, I learned to optimize functions, especially those in nested loops, as small millisecond increases in the time to execute functions such as collision detection allow for a much more enjoyable experience.</p>
-            <a class="download-button" href="files/pong-windows.zip">Windows</a>
-            <a class="download-button" href="files/pong-darwin.zip">macOS</a>
-            <a class="download-button" href="files/pong-source.zip">Source code</a>
+    </section>
 
-        </section>
-    </body>
+    <video controls class="demo-right">
+        <source src="videos/pong-video.mp4">
+    </video>
+    <section class="with-demo-left">
+        <h2>Pong game using python</h2>
+        <h3>Project time: 2 weeks. Completed: 05-03-2020</h3>
+        <p>An imitation of one of the first video games, this is my first game using python graphics. I experimented
+            with turtle graphics and pygame mixer, while applying various areas of mathematics such as Cartesian
+            coordinates, right-triangle trigonometry, and varying rates of change. I also used my knowledge about
+            physics to create smooth, realistic motion (however, there are far too many asteroids onscreen for this to
+            use this technique for them). While creating this game, I learned to optimize functions, especially those in
+            nested loops, as small millisecond increases in the time to execute functions such as collision detection
+            allow for a much more enjoyable experience.</p>
+        <a class="download-button" href="files/pong-windows.zip">Windows</a>
+        <a class="download-button" href="files/pong-darwin.zip">macOS</a>
+        <a class="download-button" href="files/pong-source.zip">Source code</a>
+
+    </section>
+    <script>
+        var parameters = location.search.substring(1).split("&");
+        var temp = parameters[0].split("=");
+        if (temp[0] != "theme") {
+            document.getElementById("return").style.display = "none";
+        }
+    </script>
+</body>
+
 </html>
