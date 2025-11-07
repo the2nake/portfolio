@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PostCard from "../components/PostCard.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("posts"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout title="portfolio">
+  <div class="index-content framed">
+    <h1 id="hello-there">Hello there!</h1>
+    <p>
+      Welcome to the landing page of my portfolio. As you can probably tell,
+      things are kind of under construction right now, but hopefully things will
+      reach a more polished state soon :&gt;
+    </p>
+    <p>
+      <img
+        src="https://panr.github.io/hugo-theme-terminal-demo/img/terminal-css.png"
+        alt="Terminal.css Preview"
+      />
+    </p>
+  </div>
+
+  <div class="posts">
+    <p>Some posts for your enjoyment (and my employment :&gt;)</p>
+    {posts.map((post) => <PostCard post={post} />)}
+  </div>
+</BaseLayout>
