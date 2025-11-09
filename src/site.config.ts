@@ -2,12 +2,13 @@ import type { SiteConfig } from '~/types'
 
 const config: SiteConfig = {
   // Absolute URL to the root of your published site, used for generating links and sitemaps.
-  site: 'https://the2nake.github.io/portfolio',
+  site: 'https://the2nake.github.io/',
+  base: '/portfolio',
   // The name of your site, used in the title and for SEO.
   title: 'the2nake',
   // The description of your site, used for SEO and RSS feed.
   description:
-    'A coder-ready Astro blog theme with 59 of your favorite color schemes to choose from',
+    'the2nake\'s portfolio',
   // The author of the site, used in the footer, SEO, and RSS feed.
   author: 'the2nake',
   // Keywords for SEO, used in the meta tags.
@@ -30,15 +31,15 @@ const config: SiteConfig = {
   navLinks: [
     {
       name: 'Home',
-      url: '/portfolio',
+      url: '',
     },
     {
       name: 'About',
-      url: '/portfolio/about',
+      url: '/about',
     },
     {
       name: 'Archive',
-      url: '/portfolio/posts',
+      url: '/posts',
     },
     {
       name: 'GitHub',

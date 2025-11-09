@@ -6,6 +6,7 @@ import Tags from '~/components/Tags.astro'
 import PostInfo from '~/components/PostInfo.astro'
 import type { Collation } from '~/types'
 import { TagsGroup } from '~/utils'
+import siteConfig from '~/site.config'
 
 interface Props {
   post: CollectionEntry<'posts'>
@@ -21,7 +22,7 @@ if (post.data.tags && post.data.tags.length > 0) {
   tags = tagsGroup.matchMany(post.data.tags)
 }
 const samePage = Astro.url.pathname === `/posts/${post.id}`
-const articleLink = samePage ? `#${post.id}` : `/posts/${post.id}`
+const articleLink = samePage ? `#${post.id}` : `${siteConfig.base}/posts/${post.id}`
 ---
 
 <article class="w-full py-5 my-1 md:my-4 border-accent/10">
