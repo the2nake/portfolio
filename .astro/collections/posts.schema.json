@@ -7,48 +7,33 @@
         "title": {
           "type": "string"
         },
+        "published": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "string",
+              "format": "date"
+            },
+            {
+              "type": "integer",
+              "format": "unix-time"
+            }
+          ]
+        },
+        "draft": {
+          "type": "boolean",
+          "default": false
+        },
         "description": {
           "type": "string"
-        },
-        "pubDate": {
-          "anyOf": [
-            {
-              "type": "string",
-              "format": "date-time"
-            },
-            {
-              "type": "string",
-              "format": "date"
-            },
-            {
-              "type": "integer",
-              "format": "unix-time"
-            }
-          ]
-        },
-        "updatedDate": {
-          "anyOf": [
-            {
-              "type": "string",
-              "format": "date-time"
-            },
-            {
-              "type": "string",
-              "format": "date"
-            },
-            {
-              "type": "integer",
-              "format": "unix-time"
-            }
-          ]
         },
         "author": {
           "type": "string"
         },
-        "image": {
-          "type": "string"
-        },
-        "externalLink": {
+        "series": {
           "type": "string"
         },
         "tags": {
@@ -58,9 +43,25 @@
           },
           "default": []
         },
-        "draft": {
+        "coverImage": {
+          "type": "object",
+          "properties": {
+            "src": {
+              "type": "string"
+            },
+            "alt": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "src",
+            "alt"
+          ],
+          "additionalProperties": false
+        },
+        "toc": {
           "type": "boolean",
-          "default": false
+          "default": true
         },
         "$schema": {
           "type": "string"
@@ -68,7 +69,7 @@
       },
       "required": [
         "title",
-        "pubDate"
+        "published"
       ],
       "additionalProperties": false
     }
