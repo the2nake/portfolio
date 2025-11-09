@@ -30,15 +30,15 @@ const config: SiteConfig = {
   navLinks: [
     {
       name: 'Home',
-      url: '/',
+      url: '/portfolio',
     },
     {
       name: 'About',
-      url: '/about',
+      url: '/portfolio/about',
     },
     {
       name: 'Archive',
-      url: '/posts',
+      url: '/portfolio/posts',
     },
     {
       name: 'GitHub',
