@@ -31,7 +31,10 @@
           "type": "string"
         },
         "author": {
-          "type": "string"
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "series": {
           "type": "string"
