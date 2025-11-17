@@ -3,8 +3,8 @@ title: 'FLIP Fluid Simulation'
 published: 2025-11-12
 draft: true
 toc: true
-tags: ['simulation', 'fluid']
-description: 'FLIP implementation in C with SDL. This is some underlying work for a clone of the fluid simulation pendant by mitxela.'
+tags: ['simulation']
+description: 'FLIP implementation in C with SDL. This is underlying work for a clone of the fluid simulation pendant by mitxela.'
 author: ['the2nake']
 ---
 
