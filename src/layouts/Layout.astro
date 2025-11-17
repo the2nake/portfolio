@@ -130,7 +130,7 @@ let generatedCss: string = cssLines.join('\n')
     <meta name="generator" content={Astro.generator} />
     <meta name="title" content={pageTitle} />
     <meta name="description" content={pageDescription} />
-    <meta name="author" content={pageAuthor} />
+    <meta name="author" content={pageAuthor[0]} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
     <meta property="og:url" content={pageUrl} />
@@ -143,7 +143,7 @@ let generatedCss: string = cssLines.join('\n')
     <meta name="keywords" content={pageKeywords} />
     <link rel="canonical" href={pageUrl} />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={siteConfig.base+"/favicon.svg"} type="image/svg+xml" />
     <link
       rel="alternate"
       type="application/rss+xml"
