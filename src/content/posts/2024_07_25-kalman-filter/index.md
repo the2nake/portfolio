@@ -24,9 +24,9 @@ We prioritised the new physical design, which meant that we had to improve track
 
 ## Equations
 
-The equations are actually fairly simple, but the "intent" of the linear algebra was not immediately obvious to me. To spare you a recount of the many misconceptions and half-knowledges I formed along the way, here is how they work as I understand it now.
+The equations are actually fairly simple, but the "intent" of the linear algebra was not immediately obvious to me. Here's how I would summarise them after completing this project.
 
-Notation is the most difficult part of understanding these equations.
+Note: notation *by far* is the most difficult part of understanding these equations.
 
 | Expression        | Meaning                                              |
 | ----------------- | ---------------------------------------------------- |
@@ -35,9 +35,9 @@ Notation is the most difficult part of understanding these equations.
 | $\bold{T}$        | matrix $\bold{T}$                                    |
 | $\bold{y}_{n\|m}$ | value of $\bold{y}$ at timestep $n$ computed at $m$. |
 
-### initial state
+### state space representation
 
-We used a state vector $\bold{x} = \begin{bmatrix} x \\ \dot{x} \\ \ddot{x} \\ y \\ \dot{y} \\ \ddot{y} \\ \theta \\ \dot{\theta} \end{bmatrix}$.
+We used a state vector $\bold{x} = \begin{bmatrix} x & \dot{x} & \ddot{x} & y & \dot{y} & \ddot{y} & \theta & \dot{\theta} \end{bmatrix}^T$. The entries represent the position and derivatives, as well as heading and angular velocity.
 
 ### predict
 
@@ -47,7 +47,7 @@ $$
 \end{equation}
 $$
 
-This equation computes the estimated state of the system in the future. $\bold{F}\hat{\bold{x}}_{k-1|k-1}$ models the how the system evolves over one timestep, and $\bold{G}\bold{u}_{k-1}$ models how known control inputs now (at time $n=k-1$) will impact the state in the future at $k$.
+Computes the estimated state of the system in the future. $\bold{F}\hat{\bold{x}}_{k-1|k-1}$ models the how the system evolves over one timestep, and $\bold{G}\bold{u}_{k-1}$ models how known control inputs now (at time $n=k-1$) will impact the state in the future at $k$.
 
 $$
 \bold{F}=\begin{bmatrix} \
@@ -70,19 +70,19 @@ $$
 \end{equation}
 $$
 
-This equation extrapolates the covariance of the state estimate computed above. $\bold{F}\bold{P}_{k-1|k-1}\bold{F}^T$ representes the how the current estimate's error spreads after one timestep.
+Extrapolates the covariance of the state estimate computed above. $\bold{F}\bold{P}_{k-1|k-1}\bold{F}^T$ is the expansion of the current estimate's error after one timestep.
 
-It took me a while to realise, but the effect of multiplying by $\bold{F}$ on the covariance of $\hat{\bold{x}}$ is analogous to how scalar multiplication has a quadratic effect on the variance.
+Multiplying by $\bold{F}$ on the covariance of $\hat{\bold{x}}$ is kind of analogous to how scalar multiplication has a quadratic effect on the variance. The actual expansion, based on $\bold{P}_{k|k}=E((\bold{e}_{k|k})(\bold{e}_{k|k})^T)$ where $\bold{e}_{k|k}=\bold{x}_{k|k}-\hat{\bold{x}}_{k|k}$, is not too insightful.
 
-Note: the derivation relies on expanding $\bold{P}_{k|k}=E((\bold{e}_{k|k})(\bold{e}_{k|k})^T)$ where $\bold{e}_{k|k}=\bold{x}_{k|k}-\hat{\bold{x}}_{k|k}$, but this is not too interesting.
-
-$\bold{Q}$ is the process noise covariance (i.e. error that is introduced through incorrect modelling). We set this fairly high, because we weren't able to model the control input very well.
+$\bold{Q}$ is error that is introduced through incorrect modelling). Because we didn't model the control input, we had this pretty high.
 
 ### correct
+
+
 
 ## Implementation
 
 ## Closing Thoughts
 
 - At some point, I want to revisit modelling the control input. It would be useful to characterize the impact of a movement command on the position
-- The extended or unscented variants of the filter are undoubtedly better suited for this application
+- The extended or unscented variants of the Kalman filter are indubitably better suited for this application
