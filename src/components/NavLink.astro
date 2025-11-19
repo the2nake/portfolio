@@ -7,13 +7,13 @@ interface Props {
 }
 
 const { link } = Astro.props
+const url = link.external ? link.url : siteConfig.base + link.url
 ---
 
 <a
-  class="underline"
   rel={link.external ? 'noopener noreferrer' : undefined}
   target={link.external ? '_blank' : undefined}
-  href={link.external ? link.url : siteConfig.base + link.url}
+  href={url}
 >
-  {link.name}
+  {`[${url == Astro.url.pathname ? "> " : ""}${link.name.toLowerCase()}]`}
 </a>

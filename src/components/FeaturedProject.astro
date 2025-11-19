@@ -1,0 +1,24 @@
+---
+import siteConfig from '~/site.config'
+
+const { projectLink } = Astro.props
+---
+
+<div class="project-panel border-accent/30 rounded-md">
+  <span class="project-description">
+    <p><slot /></p>
+  </span>
+  {
+    projectLink ? (
+      <a href={projectLink}>
+        <span class="project-preview">
+          <p>[github]</p>
+        </span>
+      </a>
+    ) : (
+      <span class="project-preview">
+        <p>[coming soon]</p>
+      </span>
+    )
+  }
+</div>

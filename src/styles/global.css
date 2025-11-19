@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import 'katex/dist/katex.css';
+@import './custom.css';
 
 /* https://fontsource.org/fonts/jetbrains-mono/install */
 /* jetbrains-mono-latin-wght-normal */

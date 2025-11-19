@@ -1,0 +1,43 @@
+---
+import Layout from '~/layouts/Layout.astro'
+import FeaturedProject from '~/components/FeaturedProject.astro'
+import PageHeader from '~/components/PageHeader.astro'
+---
+
+<Layout title="Featured Projects" description="">
+  <div class="mt-2 sm:mt-0">
+    <PageHeader />
+    <div class="mb-5 prose">
+      <p>
+        The highlights of my journey towards a better understanding of the art of
+        engineering, ordered by recency.
+      </p>
+      <FeaturedProject projectLink="https://github.com/umigv/UMARV-CV-ScenePerception">
+        [University]
+        <br />
+        Driveable area model from stereo vision
+        <br />
+        My first project with ARV.
+      </FeaturedProject>
+      <FeaturedProject>
+        [University]
+        <br />
+        Fluid implicit particle simulation
+        <br />
+        An absolute pain.
+      </FeaturedProject>
+      <FeaturedProject projectLink="https://github.com/the2nake/foundry-high-stakes">
+        [High School]
+        <br />
+        V5RC High Stakes competition robot
+        <br />
+        Featuring the Kalman filter (et al.)
+      </FeaturedProject>
+    </div>
+  </div>
+  <!-- <div class="max-w-full py-7.5">
+    <h1 class="md:mx-2 mb-3 text-[1.75rem] text-heading1 font-semibold">
+      # {frontmatter.title}
+    </h1>
+  </div> -->
+</Layout>

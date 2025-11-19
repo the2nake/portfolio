@@ -38,6 +38,10 @@ const config: SiteConfig = {
       url: '/about',
     },
     {
+      name: 'Projects',
+      url: '/featured'
+    },
+    {
       name: 'Archive',
       url: '/posts',
     },

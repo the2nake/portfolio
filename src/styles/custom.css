@@ -1,0 +1,65 @@
+@font-face {
+  font-family: 'DOS/V re. ANK30';
+  src: url(/portfolio/fonts/Web437_DOS-V_re_ANK24.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'IBM Model3x Alt4';
+  src: url(/portfolio/fonts/Web437_IBM_Model3x_Alt4.woff) format('woff');
+}
+
+.project-panel {
+  margin: calc(var(--spacing) * 6.5);
+  background-color: var(--theme-accent);
+  display: grid;
+  grid-template-columns: 60% 1fr;
+  border-width: calc(var(--spacing) * 0.5);
+  column-gap: calc(var(--spacing) * 0.5);
+}
+
+.project-panel p {
+  margin: 0 !important;
+  font-family: 'IBM Model3x Alt4';
+}
+
+.project-panel {
+  span {
+    background-color: var(--theme-background);
+    display: inline-block;
+    padding: 26px;
+  }
+
+  .project-description {
+    @apply rounded-l;
+  }
+
+  a,
+  .project-preview {
+    @apply border-accent/0 rounded-r;
+    text-decoration: none !important;
+
+    display: flex;
+    flex-direction: column-reverse;
+    flex-grow: 0;
+    overflow: hidden;
+
+    p {
+      font-family: 'IBM Model3x Alt4';
+      text-align: right;
+      line-height: 1;
+      display: none;
+    }
+  }
+
+  a > .project-preview {
+    @apply border-2;
+    box-sizing: border-box;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .project-preview:hover p {
+    text-align: right;
+    display: inline;
+  }
+}

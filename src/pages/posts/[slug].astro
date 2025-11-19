@@ -69,7 +69,7 @@ if (postData.tags && postData.tags.length > 0) {
 <Layout
   title={postData.title}
   description={postData.description}
-  author={postData.author}
+  author={(postData.author || [""])[0]}
   tags={postData.tags}
 >
   <article class="max-w-full py-7.5" data-pagefind-body>

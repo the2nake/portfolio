@@ -26,7 +26,7 @@ We prioritised the new physical design, which meant that we had to improve track
 
 The equations are actually fairly simple, but the "intent" of the linear algebra was not immediately obvious to me. Here's how I would summarise them after completing this project.
 
-Note: notation *by far* is the most difficult part of understanding these equations.
+Note: notation _by far_ is the most difficult part of understanding these equations.
 
 | Expression        | Meaning                                              |
 | ----------------- | ---------------------------------------------------- |
@@ -52,13 +52,13 @@ Computes the estimated state of the system in the future. $\bold{F}\hat{\bold{x}
 $$
 \bold{F}=\begin{bmatrix} \
 1 & \Delta{t} & \frac{\Delta{t}^2}{2} &   &           &                       &   &           \\
-  &        1  &       \Delta{t}       &   &           &                       &   &           \\
-  &           &              1        &   &           &                       &   &           \\
+0 &        1  &       \Delta{t}       &   &           &                       &   &           \\
+0 &        0  &              1        &   &           &                       &   &           \\
   &           &                       & 1 & \Delta{t} & \frac{\Delta{t}^2}{2} &   &           \\
-  &           &                       &   &        1  &       \Delta{t}       &   &           \\
-  &           &                       &   &           &              1        &   &           \\
+  &           &                       & 0 &        1  &       \Delta{t}       &   &           \\
+  &           &                       & 0 &        0  &              1        &   &           \\
   &           &                       &   &           &                       & 1 & \Delta{t} \\
-  &           &                       &   &           &                       &   &        1  \\
+  &           &                       &   &           &                       & 0 &        1  \\
 \end{bmatrix}
 $$
 
@@ -74,11 +74,19 @@ Extrapolates the covariance of the state estimate computed above. $\bold{F}\bold
 
 Multiplying by $\bold{F}$ on the covariance of $\hat{\bold{x}}$ is kind of analogous to how scalar multiplication has a quadratic effect on the variance. The actual expansion, based on $\bold{P}_{k|k}=E((\bold{e}_{k|k})(\bold{e}_{k|k})^T)$ where $\bold{e}_{k|k}=\bold{x}_{k|k}-\hat{\bold{x}}_{k|k}$, is not too insightful.
 
-$\bold{Q}$ is error that is introduced through incorrect modelling). Because we didn't model the control input, we had this pretty high.
+$\bold{Q}$ is error that is introduced through incorrect modelling). We computed this by passing a tunable noise through our transition model. In hindsight, a control input from intended maneuvers would've been perfect here.
+
+Here it is, where $\bold{F}_x$, $\bold{F}_y$, and $\bold{F}_\theta$ correspond to the blocks in matrix $\bold{F}_\theta$.
+
+$$
+\bold{Q} = \\
+\begin{bmatrix} \\
+\bold{F}_x\begin{bmatrix} 0 & 0 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & \sigma^2_{\ddot x}\end{bmatrix}\bold{F}^T_x & & \\ 
+& \bold{F}_y\begin{bmatrix} 0 & 0 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & \sigma^2_{\ddot y}\end{bmatrix}\bold{F}^T_y  & \\
+& & \bold{F}_\theta\begin{bmatrix}0 & 0 \\ 0 & \sigma^2_{\dot \theta}\end{bmatrix}\bold{F}^T_\theta\end{bmatrix}
+$$
 
 ### correct
-
-
 
 ## Implementation
 
