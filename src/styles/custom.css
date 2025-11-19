@@ -23,17 +23,23 @@
 }
 
 .project-panel {
+  a:not(.project-image-anchor),
   span {
     background-color: var(--theme-background);
     display: inline-block;
     padding: 26px;
   }
 
+  a:not(.project-image-anchor) span {
+    padding: 0;
+  }
+
+  a,
   .project-description {
     @apply rounded-l;
   }
 
-  a,
+  a.project-image-anchor,
   .project-preview {
     @apply border-accent/0 rounded-r;
     text-decoration: none !important;
@@ -53,7 +59,7 @@
     }
   }
 
-  a > .project-preview {
+  a.project-image-anchor > .project-preview {
     @apply border-2;
     box-sizing: border-box;
     height: 100%;

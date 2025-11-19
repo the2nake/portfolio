@@ -243,7 +243,7 @@ abstract class PostsCollationGroup implements CollationGroup<'posts'> {
 
   sortCollationsLargest(): Collation<'posts'>[] {
     this.collations.sort((a, b) => b.entries.length - a.entries.length)
-    return this.collations
+    return this.collations.slice(0, 8);
   }
 
   sortCollationsMostRecent(): Collation<'posts'>[] {

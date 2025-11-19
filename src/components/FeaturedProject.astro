@@ -28,12 +28,26 @@ const blurUrl = `/portfolio/img/projects/${(previewImg || '').replace(/\.[^/.]+$
 </style>
 
 <div class="project-panel border-accent/30 rounded-md">
-  <span class="project-description">
-    <p><slot /></p>
-  </span>
   {
     projectLink ? (
       <a href={projectLink}>
+        <span class="project-description">
+          <p>
+            <slot />
+          </p>
+        </span>
+      </a>
+    ) : (
+      <span class="project-description">
+        <p>
+          <slot />
+        </p>
+      </span>
+    )
+  }
+  {
+    projectLink ? (
+      <a class="project-image-anchor" href={projectLink}>
         <span class="project-preview">
           <p>[github]</p>
         </span>
