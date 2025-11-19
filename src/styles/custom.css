@@ -25,7 +25,6 @@
 .project-panel {
   span {
     background-color: var(--theme-background);
-    /* background-image: url(/portfolio/img/projects/pandora_preview.png); */
     display: inline-block;
     padding: 26px;
   }
@@ -48,7 +47,7 @@
     p {
       font-family: 'IBM Model3x Alt4';
       text-align: right;
-    display: inline;
+      display: inline;
       line-height: 1;
       opacity: 0;
     }
