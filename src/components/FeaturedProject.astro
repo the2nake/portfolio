@@ -1,8 +1,31 @@
 ---
 import siteConfig from '~/site.config'
+const { projectLink, previewImg } = Astro.props
 
-const { projectLink } = Astro.props
+const imgUrl = `/portfolio/img/projects/${previewImg || ''}`
+const blurUrl = `/portfolio/img/projects/${(previewImg || '').replace(/\.[^/.]+$/, '')}_blur.png`
 ---
+
+<link rel="preload" as="image" href={previewImg ? imgUrl : null} />
+<link rel="preload" as="image" href={previewImg ? blurUrl : null} />
+
+<style
+  define:vars={{
+    img: previewImg ? `url("${imgUrl}")` : 'var(--theme-background)',
+    blurImg: previewImg ? `url("${blurUrl}")` : 'var(--theme-background)',
+  }}
+>
+  span.project-preview {
+    background-image: var(--blurImg);
+    background-origin: border-box;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  span.project-preview:hover {
+    background-image: var(--img);
+  }
+</style>
 
 <div class="project-panel border-accent/30 rounded-md">
   <span class="project-description">
@@ -21,4 +44,5 @@ const { projectLink } = Astro.props
       </span>
     )
   }
+  <!-- {previewImg && (<img src={`/portfolio/img/projects/${previewImg}`}/>)} -->
 </div>

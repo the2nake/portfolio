@@ -25,6 +25,7 @@
 .project-panel {
   span {
     background-color: var(--theme-background);
+    /* background-image: url(/portfolio/img/projects/pandora_preview.png); */
     display: inline-block;
     padding: 26px;
   }
@@ -42,12 +43,14 @@
     flex-direction: column-reverse;
     flex-grow: 0;
     overflow: hidden;
+    transition: background-image 5s ease-in-out;
 
     p {
       font-family: 'IBM Model3x Alt4';
       text-align: right;
+    display: inline;
       line-height: 1;
-      display: none;
+      opacity: 0;
     }
   }
 
@@ -59,7 +62,11 @@
   }
 
   .project-preview:hover p {
-    text-align: right;
-    display: inline;
+    @apply rounded-md;
+    padding: 6px;
+    background: color-mix(in srgb, var(--theme-background), transparent 30%);
+    opacity: 100%;
+    transition: all 0.25s ease-in-out;
+    max-width: fit-content;
   }
 }
