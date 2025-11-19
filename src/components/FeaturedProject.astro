@@ -1,6 +1,6 @@
 ---
 import siteConfig from '~/site.config'
-const { projectLink, previewImg } = Astro.props
+const { projectLink, previewImg, siteName } = Astro.props
 
 const imgUrl = `/portfolio/img/projects/${previewImg || ''}`
 const blurUrl = `/portfolio/img/projects/${(previewImg || '').replace(/\.[^/.]+$/, '')}_blur.png`
@@ -18,7 +18,7 @@ const blurUrl = `/portfolio/img/projects/${(previewImg || '').replace(/\.[^/.]+$
   span.project-preview {
     background-image: var(--blurImg);
     background-origin: border-box;
-    background-position: bottom;
+    background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
   }
@@ -49,7 +49,7 @@ const blurUrl = `/portfolio/img/projects/${(previewImg || '').replace(/\.[^/.]+$
     projectLink ? (
       <a class="project-image-anchor" href={projectLink}>
         <span class="project-preview">
-          <p>[github]</p>
+          <p>[{siteName || "github"}]</p>
         </span>
       </a>
     ) : (
