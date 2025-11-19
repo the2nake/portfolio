@@ -23,6 +23,10 @@
 }
 
 .project-panel {
+  a {
+    color: var(--theme-foreground) !important;
+  }
+
   a:not(.project-image-anchor),
   span {
     background-color: var(--theme-background);
