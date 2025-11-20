@@ -5,6 +5,8 @@ avatarImage:
 # githubCalendar: 'the2nake'
 ---
 
-Welcome to the landing page of my portfolio. As you can probably tell, things are kind of under construction right now, but hopefully things will reach a more polished state soon :&gt;
+Hi, I go by `the2nake` online (a tragic typo).
 
-In the meantime, check out my [featured projects](/portfolio/featured)!
+My interests include control theory, embedded programming, and competitive robotics. Check out my [featured projects](/portfolio/featured)!
+
+I'm currently studying engineering at the University of Michigan.
