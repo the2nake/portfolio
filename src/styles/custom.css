@@ -15,72 +15,46 @@
 
 .project-panel {
   margin: calc(var(--spacing) * 6.5);
+
   background-color: var(--theme-accent);
   display: grid;
   grid-template-columns: 60% 1fr;
+
   border-width: calc(var(--spacing) * 0.5);
   column-gap: calc(var(--spacing) * 0.5);
-}
 
-.project-panel p {
-  margin: 0 !important;
-  font-family: 'IBM Model3x Alt4';
-}
-
-.project-panel {
-  a {
+  p {
+    margin: 0 !important;
     color: var(--theme-foreground) !important;
+    font-family: 'IBM Model3x Alt4';
   }
 
-  a:not(.project-image-anchor),
   span {
     background-color: var(--theme-background);
     display: inline-block;
     padding: 26px;
   }
 
-  a:not(.project-image-anchor) span {
-    padding: 0;
-  }
-
-  a,
-  .project-description {
-    @apply rounded-l;
-  }
-
-  a.project-image-anchor,
-  .project-preview {
-    @apply border-accent/0 rounded-r;
-    text-decoration: none !important;
-
-    display: flex;
-    flex-direction: column-reverse;
-    flex-grow: 0;
-    overflow: hidden;
-    transition: background-image 5s ease-in-out;
+  span.project-preview {
+    box-sizing: border-box;
+    height: 100%;
 
     p {
-      font-family: 'IBM Model3x Alt4';
-      text-align: right;
       display: inline;
       line-height: 1;
+
+      padding: 6px;
+      background: color-mix(in srgb, var(--theme-background), transparent 30%);
+      max-width: fit-content;
+
       opacity: 0;
     }
   }
 
-  a.project-image-anchor > .project-preview {
-    @apply border-2;
-    box-sizing: border-box;
-    height: 100%;
-    overflow: visible;
-  }
-
-  .project-preview:hover p {
-    @apply rounded-md;
-    padding: 6px;
-    background: color-mix(in srgb, var(--theme-background), transparent 30%);
+  span.project-preview:hover p {
+    position: relative;
     opacity: 100%;
     transition: all 0.25s ease-in-out;
-    max-width: fit-content;
+    z-index: 1;
   }
 }

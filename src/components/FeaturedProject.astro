@@ -1,5 +1,12 @@
 ---
 import siteConfig from '~/site.config'
+
+interface Props {
+  projectLink?: string
+  previewImg?: string
+  siteName?: string
+}
+
 const { projectLink, previewImg, siteName } = Astro.props
 
 const imgUrl = `/portfolio/img/projects/${previewImg || ''}`
@@ -16,47 +23,51 @@ const blurUrl = `/portfolio/img/projects/${(previewImg || '').replace(/\.[^/.]+$
   }}
 >
   span.project-preview {
-    background-image: var(--blurImg);
+    position: relative;
+  }
+
+  span.project-preview::before,
+  span.project-preview::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
     background-origin: border-box;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
   }
-  span.project-preview:hover {
+
+  span.project-preview::before {
+    background-image: var(--blurImg);
+    opacity: 1;
+  }
+
+  span.project-preview::after {
     background-image: var(--img);
+    opacity: 0;
+  }
+  span.project-preview:hover::after {
+    opacity: 1;
+    transition: all 0.25s ease-in-out !important;
   }
 </style>
 
-<div class="project-panel border-accent/30 rounded-md">
-  {
-    projectLink ? (
-      <a href={projectLink}>
-        <span class="project-description">
-          <p>
-            <slot />
-          </p>
-        </span>
-      </a>
-    ) : (
-      <span class="project-description">
-        <p>
-          <slot />
-        </p>
-      </span>
-    )
-  }
-  {
-    projectLink ? (
-      <a class="project-image-anchor" href={projectLink}>
-        <span class="project-preview">
-          <p>[{siteName || "github"}]</p>
-        </span>
-      </a>
-    ) : (
-      <span class="project-preview">
-        <p>[coming soon]</p>
-      </span>
-    )
-  }
-  <!-- {previewImg && (<img src={`/portfolio/img/projects/${previewImg}`}/>)} -->
-</div>
+<a class="project-anchor" href={projectLink}>
+  <div class="project-panel border-accent/30 rounded-md">
+    <span class="project-description rounded-l">
+      <p>
+        <slot />
+      </p>
+    </span>
+
+    <span class="project-preview rounded-r">
+      <p class="rounded-sm">[{siteName || (projectLink ? 'github' : 'coming soon')}]</p>
+    </span>
+
+    <!-- {previewImg && (<img src={`/portfolio/img/projects/${previewImg}`}/>)} -->
+  </div>
+</a>
