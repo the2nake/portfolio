@@ -2,7 +2,7 @@
 title: 'Showing Off Blog Features'
 published: 2021-07-20
 draft: true
-tags: ['astro', 'demo', 'markdown']
+tags: []
 toc: true
 coverImage:
   src: './cover.jpg'

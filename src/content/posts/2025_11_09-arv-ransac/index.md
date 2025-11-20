@@ -3,7 +3,7 @@ title: 'Ground Plane Detection with RANSAC'
 published: 2025-11-09
 draft: true
 toc: true
-tags: ['sensors', 'computer-vision', 'ransac']
+tags: ['sensors', 'computer-vision']
 description: 'An algorithm written for ARV 2025-2026. We used random sample consensus (RANSAC) to create a occupancy grid used for pathfinding around obstacles.'
 author: ['the2nake', 'joshua kin', 'edison zhou']
 ---
