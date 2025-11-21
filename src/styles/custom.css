@@ -38,6 +38,7 @@
   span.project-preview {
     box-sizing: border-box;
     height: 100%;
+    overflow: hidden;
 
     p {
       display: inline;
