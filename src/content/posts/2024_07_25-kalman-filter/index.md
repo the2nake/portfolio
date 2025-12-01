@@ -12,7 +12,7 @@ This project is what started my foray into some control theory beyond PID. Admit
 
 This was the first time I really understood linear algebra, and the first time I applied further mathematics to a robotic application.
 
-## Context
+## context
 
 We track robot position with omnidirectional wheels (omniwheels) and odometry. Odometry operates using a dead-reckoning approach: it adds robot-frame displacement vectors measured by the wheels to a tracked global displacement vector. An IMU provides the angle needed to perform the change of basis.
 
@@ -22,7 +22,7 @@ We found that the construction of the new wheels caused poorer tracking performa
 
 We prioritised the new physical design, which meant that we had to improve tracking performance in software. The Kalman filter was my answer to this problem, chosen because low-lag position tracking was vital for our motion algorithms and because of the many ways to tune it to best suit our application.
 
-## Equations
+## equations
 
 The equations are actually fairly simple, but the "intent" of the linear algebra was not immediately obvious to me. Here's how I would summarise them after completing this project.
 
@@ -88,9 +88,9 @@ $$
 
 ### correct
 
-## Implementation
+## implementation
 
-## Closing Thoughts
+## closing thoughts
 
 - At some point, I want to revisit modelling the control input. It would be useful to characterize the impact of a movement command on the position
 - The extended or unscented variants of the Kalman filter are indubitably better suited for this application
