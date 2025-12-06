@@ -16,6 +16,12 @@
     U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+@import '@fontsource/ibm-plex-mono/400.css';
+
+:root {
+  --theme-font: 'IBM Plex Mono' !important;
+}
+
 @theme {
   --color-accent: var(--theme-accent);
   --color-foreground: var(--theme-foreground);

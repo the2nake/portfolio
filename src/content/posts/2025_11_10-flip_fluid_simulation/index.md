@@ -13,7 +13,7 @@ Writing simulations isn't one of my main interests, per se, but it is pretty use
 I honestly had some trouble replicating the simulation behaviour. For no discernible reason, my simulation has a bit higher viscosity than expected, and some overcompression of particles at the bottom. Though I am not totally happy with the result, I haven't yet found how to fix it. I'll make an update once I do.
 
 :::note
-2025-12-05 :clinking_glasses:: Fixed the viscosity issue!  Viscosity is caused when particles adopt their neighbours' velocities. The origin was a bug in `reset_velocity_field()` which set initial weight components to `1.f` instead of `0.f`. This likely wasn't caught because this was correct behaviour in a previous revision. I must've missed changing it after moving to FLIP.
+2025-12-05 :clinking_glasses:: Fixed the viscosity issue! Viscosity is caused when particles adopt their neighbours' velocities. The origin was a bug in `reset_velocity_field()` which initialised interpolation weights to `1.f` instead of `0.f`. This likely wasn't caught because this was expected behaviour in a previous revision. I must've missed changing it after moving to FLIP.
 :::
 
 ### demo
@@ -30,9 +30,27 @@ But first! a demo.
 
 ## algorithm summary
 
-The FLIP algorithm simulates a visually-realistic fluid using a grid of cells populated with water particles. The particles carry the fluid between cells, while the grid cells are used to ensure that the fluid is incompressible. The cells work by balancing the inflow and outflow of each cell.
+**The FLIP algorithm simulates a visually realistic fluid** using a body of particles and a set of cells in a grid. They create the "moving" and "flowing" properties, respectively. The diagram below (Fig. 1) illustrates the three cell types (air, fluid, and solid) and some interactions of interest.
 
-![flowchart of flip simulation](./flip_flowchart.jpg 'Figure 1: Flowchart of the simulation')
+![diagram of simulation setup](./flip_setup.jpg 'Figure 1: FLIP simulation setup')
+
+The particles dictate where the fluid actually is. They all store position and velocity vectors, and in each simulation step are used to account for external forces (e.g. gravity). This is called **advection**.
+
+By storing the rate of flow in/out of the cell, the net (`out - in`) flow rate can be computed. This value is then used for incompressibility, i.e. balancing the flow rate to zero at each cell. This is called **projection**.
+
+:::note
+**Why not use only particles or only cells to achieve this?**
+
+It's actually possible! This is the Eulerian fluid simulation, which uses only cells to model fluid movement. However, we want to create an air-water boundary, which is hard to determine without particles.
+:::
+
+Because we use this dual velocity representation with flow rates and particle movement, we require a transfer step from particles to velocities and back again.
+
+These transfer steps, as well another nuance I will get to later, rely on **bilinear interpolation**. Essentially, we blend 4 bounding corners using the relative position of a particle contained within their bounds. This will be explained in more detail in the relevant section(s).
+
+The combination of these steps--advection, projection, and transfer--is shown here (Fig. 2).
+
+![flowchart of flip simulation](./flip_flowchart.jpg 'Figure 2: Flowchart of the simulation')
 
 ### approach
 
@@ -45,10 +63,10 @@ My main targets for this project included limiting memory usage (where possible)
 I tried to guide my approach with these ideas:
 
 - Make each simulation step as divorced as possible from its preceding/following steps
-- Try to limit calls to `malloc`, only using it for particles (particle count changes with different arrangements of cells)
+- Try to limit dynamic memory allocation (`malloc`) to particle data (particle count changes with different starting setups)
 - Use dual indices for cell data and single indices for other things
 
-That last bit turned out to be unwise. The rationale, at the time, was that "this is nice and consistent" :clown_face:. However, this divide led to *many* errors when converting between flow rate indices and cell indices.
+That last bit turned out to be unwise. The rationale, at the time, was that "this is nice and consistent" :clown_face:. However, this divide led to **many** errors when converting between flow rate indices and cell indices.
 
 Another lesson learned. Mixing indexing schemes between coupled data is _not_ smart.
 
@@ -56,31 +74,30 @@ Another lesson learned. Mixing indexing schemes between coupled data is _not_ sm
 
 With the walls, this is trivial, but I still _(sigh)_ managed to make some dumb mistakes. Notably, I trapped particles mid-air by pushing particles back by their velocity instead of the container wall normal.
 
-There is one non-obvious point though: upon a collision, only the velocity component of the particle *orthogonal to the surface normal* should be kept.
+:::warning
+Upon a collision, only the velocity component _orthogonal to the surface normal_ should be kept. In other words, you lose momentum when you run into a wall.
+:::
 
-Collisions between two particles, however, is more difficult. In a nutshell, I used a hash table of `cell -> particles in cell` to limit collision check distances. I'll probably describe this in more detail in another post.
+Collisions between two particles, however, is more difficult. In a nutshell, I generated a hash table of `cell -> contained particles` to limit collision check distances to a particle's surroundings. I'll probably describe this in more detail in another post.
 
 ### density computation
 
-The idea is to smoothing a particle's density impact across cells. This is done using bilinear interpolation. Surprisingly, I got this right on the first try, aside from having the corner weights reversed.
+The idea is to smooth a particle's density impact across cells with bilinear interpolation. I think the best way to understand this is visually, so check out Figure 3. Do note that densities are placed at the centre of cells, not at corners.
 
-Speaking of reversing corner weights, the output for that only looks slightly noisier than the correct output, so I think there is something to be said for knowing when not to chalk it up to "numerical noise" or some other hand-wavy explanation. On the other hand, sometimes that is the right answer.
+![diagram of bilinear interpolation for density](./flip_density_interpolation.jpg 'Figure 3: Finding density with bilinear interpolation')
 
-```cpp title="density interpolation"
+You may notice that the above specifies calculation of a _particle's density_, not the density at a cell. This is for simplicity's sake; you actually have to do this process in reverse.
 
-// c00--|--c01     grid centered on the particle
-//  | . | . |      cxx indicates center of the cell
-//  |---|---|      areas marked with a `.` are the interpolation
-//  | . | . |        factors for the *opposite* corner
-// c10--|--c11
+Here's a trimmed down implementation for this process. For each particle, we increment the density at each corner by its corresponding weight.
 
-// find indices for the 2x2 cells containing the particle
+```cpp title="density interpolation" {"1. find the indices of the four cells:":1-5} {"2. compute interpolation weights:":7-12} {"3. ignore solid cells (NaN density):":19-23}
+.
 int i0 = particles[i].x2 / CELL_H - 0.5f;
 int j0 = particles[i].x1 / CELL_W - 0.5f;
 int i1 = imin(i0 + 1, SIM_H - 1);
 int j1 = imin(j0 + 1, SIM_W - 1);
 
-// interpolation factor for the area closer to the bottom-right
+
 float f1_x1 = particles[i].x1 / CELL_W - (j0 + 0.5f);
 float f1_x2 = particles[i].x2 / CELL_H - (i0 + 0.5f);
 // for area closer to the top-left
@@ -92,12 +109,12 @@ float *surrounding[4] = {&densities[i0][j0], &densities[i0][j1],
 float factors[4] = {f0_x2 * f0_x1, f0_x2 * f1_x1,  //
                     f1_x2 * f0_x1, f1_x2 * f1_x1};
 
-// redistribute density if hits a solid
-//   the ones that are solid have density of `nan` already
+
 float sum_density = 0.f;
 for (int k = 0; k < 4; ++k) {
   sum_density += isnan(*surrounding[k]) ? 0.f : factors[k];
 }
+
 if (sum_density > 0) {
   for (int k = 0; k < 4; ++k) {
     *surrounding[k] += factors[k] / sum_density;
@@ -105,42 +122,53 @@ if (sum_density > 0) {
 }
 ```
 
+Surprisingly, I got this right on the first try, aside from having the corner weights reversed.
+
+:::note
+Speaking of reversing corner weights, the output for that only looks slightly noisier than the correct output.
+
+I think there is something to be said for knowing when not to chalk errors up to "numerical noise" or some other hand-wavy nonsense. On the other hand, sometimes that is the truth.
+:::
+
 ### incompressibility
 
-Enforcing incompressibility (a.k.a. projection) is done iteratively. The initial steps to achieve a fluid-like motion were pretty easy, but I got stuck here. If I had to guess, it's probably because there are a lot of numbers and it was a lot to keep in my head at the same time.
+Don't worry, I haven't skipped a step here. I believe it is better to delay implementing velocity transfer until the end. For now, setting the flow rate boundary to just that of one particle is sufficient.
 
-Some of my mistakes:
+In the projection step, we enforce incompressibility by augmenting inward flow rates by a positive average flow (`net flow / # of neighbours`) and reducing outward flow rates. When the net flow is negative, we do the opposite.
 
-- Ignoring the boundaries attached to air cells
-- Computing with `NAN` instead of `0`
-- Swapping indices between flow rate fields `v1` and `v2`
+In a single pass, this operation fixes flow rates for one cell but breaks them for the surrounding cells. So, projection is done iteratively, with each iteration slightly balancing the flow rates of every cell.
 
-Visualising the flow rates turned out to be most helpful for fixing these mistakes. _Especially_ for the last one. Here's a trimmed-down version of the code
+Here's the code, annotated with key steps.
 
-```cpp title="projection step"
+```cpp title="projection step" {"1. find flow rates that can be adjusted:":6-10} {"2. find flow rate indices:":15-17} {"3. compute average flow:": 24-27}
 for (int n = 0; n < iters; ++n) {
   for (int i = 1; i < SIM_H - 1; ++i) {
     for (int j = 1; j < SIM_W - 1; ++j) {
-      if (states[i][j] != water_e) continue;
-      bool sl = states[i][j - 1] != solid_e;
+      if (states[i][j] != water_e) continue; // only water cells flow
+
+
+      bool sl = states[i][j - 1] != solid_e; // water doesn't flow into solids
       bool sr = states[i][j + 1] != solid_e;
       bool su = states[i - 1][j] != solid_e;
       bool sd = states[i + 1][j] != solid_e;
-      int s = sl + sr + su + sd; // flow rates that can be balanced
+
+      int s = sl + sr + su + sd;             // # of free flow rates
       if (!s) continue;
+
 
       const int v1_i = i * (SIM_W + 1) + j;  // left flow rate (going in)
       const int v2_i = i * SIM_W + j;        // top flow rate (going in)
+
       float *vl = &v1[v1_i];
       float *vr = &v1[v1_i + 1];
       float *vu = &v2[v2_i];
       float *vd = &v2[v2_i + SIM_W];
 
-      // higher net flow out will cause velocities to be adjusted inwards
+
       float flow = (*vr + *vd - *vl - *vu)                 // net flow
       flow -= k_stiffness * (densities[i][j] - DENSITY_0); // separate dense areas
+      flow *= k_relax / s;                                 // 1 < k_relax < 2
 
-      flow *= k_relax / s; // take the average
       *vl += sl * flow;
       *vr -= sr * flow;
       *vu += su * flow;
@@ -150,24 +178,47 @@ for (int n = 0; n < iters; ++n) {
 }
 ```
 
+:::note
+`DENSITY_0`: rest density of the fluid. I set this to the number of particles starting in each cell.
+
+`k_relax`: over-relaxation constant. By compensating for a greater net flow rate than exists, fewer iterations are required.
+:::
+
+The initial steps were pretty easy, but I got stuck here. If I had to guess, it's probably because there are a lot of numbers and it was a lot to keep in my head at the same time.
+
+Some of my mistakes:
+
+- Ignoring the boundaries attached to air cells
+- Computing with `NAN` instead of `0`
+- Swapping indices between flow rate fields `v1` and `v2`
+
+Visualising the flow rates turned out to be most helpful for fixing these mistakes. _Especially_ for the last one.
+
 I am still not fully finished dealing with issues here, I think. My simulation has a lot of viscosity, even before separating particles. Surely, the issue lies with incompressibility or with separation based on density. Or maybe something else. Anyway, something is up.
 
 On the bright side, it looks alright.
 
 :::note
-2025-12-05 :clinking_glasses:: Fixed! Regrettably, had to enlist the help of a clanker...
+2025-12-05 :clinking_glasses:: Fixed (see opening note)! Regrettably, had to enlist the help of a clanker...
 :::
 
-### particle to cell velocity
+### velocity transfer
 
-This step transfers particle velocities to cell velocities/flow rates using bilinear interpolation. For both the x and y flow rates, the weights are computed to the 4 enclosing flow rate locations, similar to how density is computed.
+Now, it's time to wrap up the final step. Like for density above, bilinear interpolation is our friend, although the coordinate system is a bit different. It is of particular importance to identify the correct corners to interpolate from, as they will differ for `v1` and `v2` (x and y velocities).
+
+```cpp title="velocity transfer"
+[insert diagram here]
+[insert code here]
+```
 
 This one was really challenging, and I kept getting errors with the particles flying out of bounds or division by zero weight. I would often think that I had fixed them, and then they would come back affecting different particles instead.
 
-Inspecting the problematic particles and sprinkling `assert` statements throughout the code to crash when something was up really helped here. 
+Inspecting the problematic particles and sprinkling `assert` statements throughout the code to crash when something was up really helped here.
 
-Like before, it is somehow not perfect. It fails to properly separate the particles at the bottom, though this likely doesn't have a large impact on the simulation overall; the density compensation creates a corresponding gap above them.
+:::tip
+If, like me, you possess substantial `skill issue`, frustration may ensue. Just keep at it :>
+:::
 
-## final results
+Like projection (before), it's not quite perfect. It fails to properly separate the particles at the bottom, but I don't think this has a large impact on the simulation overall; the density compensation creates a corresponding gap above them.
 
 ## closing thoughts
