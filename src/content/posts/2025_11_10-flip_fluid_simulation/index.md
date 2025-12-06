@@ -148,7 +148,7 @@ for (int n = 0; n < iters; ++n) {
 
 I am still not fully finished dealing with issues here, I think. My simulation has a lot of viscosity, even before separating particles. Surely, the issue lies with incompressibility or with separation based on density. Or maybe something else. Anyway, something is up.
 
-On the bright side, it looks good alright.
+On the bright side, it looks alright.
 
 ### particle to cell velocity
 
