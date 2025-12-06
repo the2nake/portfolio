@@ -12,6 +12,10 @@ Writing simulations isn't one of my main interests, per se, but it is pretty use
 
 I honestly had some trouble replicating the simulation behaviour. For no discernible reason, my simulation has a bit higher viscosity than expected, and some overcompression of particles at the bottom. Though I am not totally happy with the result, I haven't yet found how to fix it. I'll make an update once I do.
 
+:::note
+2025-12-05 :clinking_glasses:: Fixed the viscosity issue!  Viscosity is caused when particles adopt their neighbours' velocities. The origin was a bug in `reset_velocity_field()` which set initial weight components to `1.f` instead of `0.f`. This wasn't caught, because this was correct behaviour in a previous revision. I must have missed changing it after moving to FLIP.
+:::
+
 ### demo
 
 But first! a demo.
@@ -150,13 +154,19 @@ I am still not fully finished dealing with issues here, I think. My simulation h
 
 On the bright side, it looks alright.
 
+:::note
+2025-12-05 :clinking_glasses:: Fixed!
+:::
+
 ### particle to cell velocity
 
 This step transfers particle velocities to cell velocities/flow rates using bilinear interpolation. For both the x and y flow rates, the weights are computed to the 4 enclosing flow rate locations, similar to how density is computed.
 
 This one was really challenging, and I kept getting errors with the particles flying out of bounds or division by zero weight. I would often think that I had fixed them, and then they would come back affecting different particles instead.
 
-Inspecting the problematic particles and sprinkling `assert` statements throughout the code to crash when something was up really helped here. However, like before, it is somehow not perfect. It fails to properly separate the particles at the bottom, and perhaps the bounciness that ensues breaks up the smooth vortices that should continue as a result of the incompressibility step.
+Inspecting the problematic particles and sprinkling `assert` statements throughout the code to crash when something was up really helped here. 
+
+Like before, it is somehow not perfect. It fails to properly separate the particles at the bottom, though this likely doesn't have a large impact on the simulation overall; the density compensation creates a corresponding gap above them.
 
 ## final results
 
