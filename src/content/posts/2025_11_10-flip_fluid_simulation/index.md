@@ -1,7 +1,7 @@
 ---
 title: 'FLIP Fluid Simulation'
 published: 2025-11-12
-draft: true
+draft: false
 toc: true
 tags: ['simulation']
 description: 'FLuid Implicit Particle technique in C with SDL. This is underlying work for a clone of the fluid simulation pendant by mitxela.'
@@ -10,29 +10,25 @@ author: ['the2nake']
 
 Writing simulations isn't one of my main interests, per se, but it is pretty useful for controls engineering. Also, I couldn't get my hands on a [pendant made by mitxela](https://mitxela.com/projects/fluid-pendant) in time, so I plan to make my own version at some point. Hence, I decided to do this FLIP (**FL**uid **I**mplicit **P**article) simulation, using [a video](https://www.youtube.com/watch?v=XmzBREkK8kY) by Ten Minute Physics as a reference.
 
-I honestly had a lot of trouble replicating the simulation behaviour. I think I understand what every part does, and hopefully can explain it here, but there must be some detail in the implementation that I am missing. My simulation has issues with high viscosity, and the fluid particles are compressed at the bottom.
+I honestly had some trouble replicating the simulation behaviour. For no discernible reason, my simulation has a bit higher viscosity than expected, and some overcompression of particles at the bottom. Though I am not totally happy with the result, I haven't yet found how to fix it. I'll make an update once I do.
 
-Though I am not really happy with the result, I haven't yet found how to fix it. I will try a direct port of the code at some point.
+### demo
+
+But first! a demo.
+
+<div class="aspect-ratio-3_2">
+<iframe class="video" src="https://www.youtube.com/embed/L2p2-VZA64A?si=P41QRPNOtwL6cuND&rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+### code
+
+::github{repo="the2nake/flip"}
 
 ## algorithm summary
 
-The FLIP algorithm simulates a visually-realistic fluid using a grid of cells populated with water particles. The particles carry the water between cells, while the grid cells are used to ensure that the fluid is incompressible (i.e. inflow and outflow of each cell throughout the fluid are balanced).
+The FLIP algorithm simulates a visually-realistic fluid using a grid of cells populated with water particles. The particles carry the fluid between cells, while the grid cells are used to ensure that the fluid is incompressible. The cells work by balancing the inflow and outflow of each cell.
 
-[ insert a flowchart here lol ]
-
-In broad strokes, the steps for this algorithm are as follows:
-
-- fill the grid cells with starting `solid`, `air`, or `fluid` states
-- distribute fluid particles in `fluid` cells
-
-And loop the following:
-
-- pull particles using gravity
-- solve particle collisions
-- compute densities in each cell
-- transfer particle velocities to cells
-- enforce incompressibility
-- transfer cell flow velocities to particles
+![flowchart of flip simulation](./flip_flowchart.jpg 'Figure 1: Flowchart of the simulation')
 
 ### approach
 
@@ -42,24 +38,31 @@ My main targets for this project included limiting memory usage (where possible)
 
 ## implementation (+ challenges)
 
-Deciding how to organise the data for the cells and particles was tricky. I tried to statically allocate as much memory as possible, and dynamically allocated only the particle-related arrays to save memory. I am happy with how that turned out, but I should've paid more attention to clarity.
+I tried to guide my approach with these ideas:
 
-I tried to keep a consistent pattern of dual indices for accessing cell data (row and column) and single indices for everything else (flow rates, particles, weights). The rationale at the time was "this is nice and consistent". However, this divide led to _many_ errors when converting between indices of flow rates and indices of cells.
+- Make each simulation step as divorced as possible from its preceding/following steps
+- Try to limit calls to `malloc`, only using it for particles (particle count changes with different arrangements of cells)
+- Use dual indices for cell data and single indices for other things
 
-In retrospect, mixing indexing schemes between coupled data was _not_ smart.
+That last bit turned out to be unwise. The rationale, at the time, was that "this is nice and consistent" :clown_face:. However, this divide led to *many* errors when converting between flow rate indices and cell indices.
+
+Another lesson learned. Mixing indexing schemes between coupled data is _not_ smart.
 
 ### particle collisions
 
 With the walls, this is trivial, but I still _(sigh)_ managed to make some dumb mistakes. Notably, I trapped particles mid-air by pushing particles back by their velocity instead of the container wall normal.
 
+There is one non-obvious point though: upon a collision, only the velocity component of the particle *orthogonal to the surface normal* should be kept.
+
 Collisions between two particles, however, is more difficult. In a nutshell, I used a hash table of `cell -> particles in cell` to limit collision check distances. I'll probably describe this in more detail in another post.
 
 ### density computation
 
-The idea is to smoothing a particle's density impact across cells. This is done using bilinear interpolation.
+The idea is to smoothing a particle's density impact across cells. This is done using bilinear interpolation. Surprisingly, I got this right on the first try, aside from having the corner weights reversed.
 
-```cpp
-/*--- compute density ---*/
+Speaking of reversing corner weights, the output for that only looks slightly noisier than the correct output, so I think there is something to be said for knowing when not to chalk it up to "numerical noise" or some other hand-wavy explanation. On the other hand, sometimes that is the right answer.
+
+```cpp title="density interpolation"
 
 // c00--|--c01     grid centered on the particle
 //  | . | . |      cxx indicates center of the cell
@@ -100,13 +103,52 @@ if (sum_density > 0) {
 
 ### incompressibility
 
-The initial steps to achieve a fluid-like motion were pretty easy, but I first was stuck on solving for incompressibility.
+Enforcing incompressibility (a.k.a. projection) is done iteratively. The initial steps to achieve a fluid-like motion were pretty easy, but I got stuck here. If I had to guess, it's probably because there are a lot of numbers and it was a lot to keep in my head at the same time.
 
-I had first made a mistake where I ignored the boundaries attached to air cells.
+Some of my mistakes:
 
-Visualising the flow rates turned out to be most helpful for fixing these mistakes.
+- Ignoring the boundaries attached to air cells
+- Computing with `NAN` instead of `0`
+- Swapping indices between flow rate fields `v1` and `v2`
 
-I am still not fully finished dealing with issues here, I think. My simulation has a lot of viscosity, even before separating particles. Surely, the issue lies with incompressibility or with separation based on density. Either way, the projection step must be doing something wrong.
+Visualising the flow rates turned out to be most helpful for fixing these mistakes. _Especially_ for the last one. Here's a trimmed-down version of the code
+
+```cpp title="projection step"
+for (int n = 0; n < iters; ++n) {
+  for (int i = 1; i < SIM_H - 1; ++i) {
+    for (int j = 1; j < SIM_W - 1; ++j) {
+      if (states[i][j] != water_e) continue;
+      bool sl = states[i][j - 1] != solid_e;
+      bool sr = states[i][j + 1] != solid_e;
+      bool su = states[i - 1][j] != solid_e;
+      bool sd = states[i + 1][j] != solid_e;
+      int s = sl + sr + su + sd; // flow rates that can be balanced
+      if (!s) continue;
+
+      const int v1_i = i * (SIM_W + 1) + j;  // left flow rate (going in)
+      const int v2_i = i * SIM_W + j;        // top flow rate (going in)
+      float *vl = &v1[v1_i];
+      float *vr = &v1[v1_i + 1];
+      float *vu = &v2[v2_i];
+      float *vd = &v2[v2_i + SIM_W];
+
+      // higher net flow out will cause velocities to be adjusted inwards
+      float flow = (*vr + *vd - *vl - *vu)                 // net flow
+      flow -= k_stiffness * (densities[i][j] - DENSITY_0); // separate dense areas
+
+      flow *= k_relax / s; // take the average
+      *vl += sl * flow;
+      *vr -= sr * flow;
+      *vu += su * flow;
+      *vd -= sd * flow;
+    }
+  }
+}
+```
+
+I am still not fully finished dealing with issues here, I think. My simulation has a lot of viscosity, even before separating particles. Surely, the issue lies with incompressibility or with separation based on density. Or maybe something else. Anyway, something is up.
+
+On the bright side, it looks good alright.
 
 ### particle to cell velocity
 
