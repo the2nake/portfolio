@@ -13,7 +13,7 @@ Writing simulations isn't one of my main interests, per se, but it is pretty use
 I honestly had some trouble replicating the simulation behaviour. For no discernible reason, my simulation has a bit higher viscosity than expected, and some overcompression of particles at the bottom. Though I am not totally happy with the result, I haven't yet found how to fix it. I'll make an update once I do.
 
 :::note
-2025-12-05 :clinking_glasses:: Fixed the viscosity issue!  Viscosity is caused when particles adopt their neighbours' velocities. The origin was a bug in `reset_velocity_field()` which set initial weight components to `1.f` instead of `0.f`. This wasn't caught, because this was correct behaviour in a previous revision. I must have missed changing it after moving to FLIP.
+2025-12-05 :clinking_glasses:: Fixed the viscosity issue!  Viscosity is caused when particles adopt their neighbours' velocities. The origin was a bug in `reset_velocity_field()` which set initial weight components to `1.f` instead of `0.f`. This likely wasn't caught because this was correct behaviour in a previous revision. I must've missed changing it after moving to FLIP.
 :::
 
 ### demo
@@ -155,7 +155,7 @@ I am still not fully finished dealing with issues here, I think. My simulation h
 On the bright side, it looks alright.
 
 :::note
-2025-12-05 :clinking_glasses:: Fixed!
+2025-12-05 :clinking_glasses:: Fixed! Regrettably, had to enlist the help of a clanker...
 :::
 
 ### particle to cell velocity
