@@ -219,6 +219,6 @@ Inspecting the problematic particles and sprinkling `assert` statements througho
 If, like me, you possess substantial `skill_issue`, frustration may ensue. Just keep at it :>
 :::
 
-Like projection (before), it's not quite perfect. It fails to properly separate the particles at the bottom, but I don't think this has a large impact on the simulation overall; the density compensation creates a corresponding gap above them.
+My implementation's not quite perfect. It fails to properly separate the particles at the bottom, but I don't think this has a large impact on the simulation overall; the density compensation creates a corresponding gap above them.
 
 ## closing thoughts

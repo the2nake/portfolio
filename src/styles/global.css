@@ -16,12 +16,6 @@
     U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-@import '@fontsource/ibm-plex-mono/400.css';
-
-:root {
-  --theme-font: 'IBM Plex Mono' !important;
-}
-
 @theme {
   --color-accent: var(--theme-accent);
   --color-foreground: var(--theme-foreground);
@@ -121,10 +115,10 @@ article img {
 }
 
 .prose {
-  @apply text-base/7;
+  @apply text-base/7 text-lg;
 
   code:not(.expressive-code code) {
-    @apply text-sm text-foreground/90 bg-foreground/5 px-2 py-1 rounded-lg whitespace-nowrap;
+    @apply text-base text-foreground/90 bg-foreground/5 px-2 py-1 rounded-lg whitespace-nowrap;
   }
 
   & > *:not(div.expressive-code, img, figure, video, hr, blockquote, aside),
@@ -139,9 +133,9 @@ article img {
 
     /* Prevent italics in code blocks */
     /* Feel free to remove this if you want italics */
-    div.code span {
+    /* div.code span {
       font-style: normal !important;
-    }
+    } */
 
     div.copy {
       --button-spacing: 9px;

@@ -19,7 +19,7 @@ const config: SiteConfig = {
   socialCardAvatarImage: './src/content/avatar.jpg',
   // Font imported from @fontsource or elsewhere, used for the entire site.
   // To change this see src/styles/global.css and import a different font.
-  font: 'JetBrains Mono Variable',
+  font: 'IBM Model3x Alt4',
   // For pagination, the number of posts to display per page.
   // The homepage will display half this number in the "Latest Posts" section.
   pageSize: 6,
@@ -59,7 +59,8 @@ const config: SiteConfig = {
     // These will be used to theme the entire site along with syntax highlighting.
     // To use light-dark-auto mode, only include a light and a dark theme in that order.
     include: [
-      'catppuccin-latte',
+      'github-light-high-contrast',
+      // 'catppuccin-latte',
       'github-dark',
       //'catppuccin-mocha',
     ],

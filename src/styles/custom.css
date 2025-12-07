@@ -8,6 +8,14 @@
   src: url(../assets/fonts/Web437_IBM_Model3x_Alt4.woff) format('woff');
 }
 
+@import '@fontsource/ibm-plex-mono/400.css';
+
+:root {
+  --theme-font: 'IBM Model3x Alt4';
+}
+
+/* FEATURED PROJECTS */
+
 .project-anchor {
   display: block;
   text-decoration: none !important;
@@ -59,6 +67,8 @@
     z-index: 1;
   }
 }
+
+/* YOUTUBE EMBED */
 
 .aspect-ratio-3_2 {
   position: relative;
