@@ -199,7 +199,7 @@ I am still not fully finished dealing with issues here, I think. My simulation h
 On the bright side, it looks alright.
 
 :::note
-2025-12-05 :clinking_glasses:: Fixed (see opening note)! Regrettably, had to enlist the help of a clanker...
+2025-12-05 :clinking_glasses:: Fixed! see opening note for details. Regrettably, I had to enlist the help of a clanker...
 :::
 
 ### velocity transfer
@@ -216,7 +216,7 @@ This one was really challenging, and I kept getting errors with the particles fl
 Inspecting the problematic particles and sprinkling `assert` statements throughout the code to crash when something was up really helped here.
 
 :::tip
-If, like me, you possess substantial `skill issue`, frustration may ensue. Just keep at it :>
+If, like me, you possess substantial `skill_issue`, frustration may ensue. Just keep at it :>
 :::
 
 Like projection (before), it's not quite perfect. It fails to properly separate the particles at the bottom, but I don't think this has a large impact on the simulation overall; the density compensation creates a corresponding gap above them.

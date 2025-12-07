@@ -155,7 +155,7 @@ const config: SiteConfig = {
   socialLinks: {
     github: 'https://github.com/the2nake',
     mastodon: '',
-    email: 'https://github.com/the2nake',
+    email: 'yxcxhnhs4@mozmail.com',
     linkedin: 'https://github.com/the2nake',
     bluesky: '',
     twitter: '',
