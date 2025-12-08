@@ -216,9 +216,15 @@ This one was really challenging, and I kept getting errors with the particles fl
 Inspecting the problematic particles and sprinkling `assert` statements throughout the code to crash when something was up really helped here.
 
 :::tip
-If, like me, you possess substantial `skill_issue`, frustration may ensue. Just keep at it :>
+If, like me, you possess substantial `skill_issue`, frustration may ensue. Just keep at it :heart:.
 :::
 
 My implementation's not quite perfect. It fails to properly separate the particles at the bottom, but I don't think this has a large impact on the simulation overall; the density compensation creates a corresponding gap above them.
 
 ## closing thoughts
+
+This was an interesting challenge, despite seeming rather simple initially. Writing a simulation is quite a different task compared to other things I've done. Most notably, debugging a simulation necessitates handling a lot of data at a time to even understand what numbers are telling you. I definitely wish I had been more methodical and planned out each step precisely. It seems that with simulations, errors are particularly difficult to address while being not too much more difficult to prevent using normal programming methods.
+
+Though the result is not flawless, I am mostly happy that I could learn some new techniques. Recently, I realised that I have a tendency to think of algorithms in terms of "themes" or, in other words, general approaches to their respective problems. In that sense, the projection and particle separation steps are quite satisfying. The projection step takes very simple, fast steps to reach its desired state iteratively, while the particle collision checks are sped up by impressive magnitudes through the hash table (which I had never thought could be applied here).
+
+I had a lot of fun making this, and I hope this blog post has conveyed some of that to you. Thank you for reading, and stay tuned for updates, as I aim to bring this to a physical prototype soon :wink:.
