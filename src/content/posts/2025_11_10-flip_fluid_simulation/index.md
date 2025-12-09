@@ -204,11 +204,15 @@ On the bright side, it looks alright.
 
 ### velocity transfer
 
-Now, it's time to wrap up the final step. Like for density above, bilinear interpolation is our friend, although the coordinate system is a bit different. It is of particular importance to identify the correct corners to interpolate from, as they will differ for `v1` and `v2` (x and y velocities).
+Now, it's time to add the final component. We aim to generate flow rates based on the velocity of the closest particle, and use the same blending to reconstruct the particle's velocity after incompressibility is assured.
 
-[insert diagram here]
+Like for density above, bilinear interpolation is our friend, although the coordinate system is a bit different. It is of particular importance to identify the correct corners to interpolate from, as they will differ for `v1` and `v2` (x and y velocities).
 
-Here's a skeleton of what the implementation for transferring particle velocities to the flow rate grid would look like. I had to omit a lot of the details, but the essence is to store bilinear interpolation weights at the 4 closest flow rate boundaries. This will be used both for taking the weighted average of particle velocities surrounding a boundary and to reconstruct the particle velocity after the flow rates are balanced in the projection step.
+The diagram below shows the correct corners to use. Note that the particle must always be within the bounding box created by the four corners of both x and y flow rates.
+
+![diagram of bilinear interpolation for velocity](./flip_velocity_interpolation.jpg 'Figure 4: Velocity interpolation positions')
+
+Here's a skeleton of what the implementation for transferring particle velocities to the flow rate grid would look like. I had to omit a lot of the details, but the essence is to store bilinear interpolation weights with their boundaries' indices. This is done to use the computed weights for both for taking the weighted average of particle velocities surrounding a boundary and to reconstructing the particle velocity.
 
 ```cpp title="velocity transfer: particle to grid"
 typedef struct {
@@ -252,7 +256,7 @@ void add_weight(field_e_t field, vel_weight_t *vel_w, float vel) {
 }
 ```
 
-Once that is done, the transfer process in reverse is dead easy. For each particle, take the weighted average of the four corner flow rates using the weights stored in `vel_w`. This is the PIC or particle-in-cell method. The FLiP method calls for computing the change in flow rate after projection and using that to avoid viscosity from converging velocity within a cell. The code for that is show below:
+Once that is done, the transfer process in reverse is dead easy. We can take the weighted average of the four corner flow rates using the weights stored in `vel_ws` (called the PIC or particle-in-cell method). The FLIP method calls for computing the change in flow rate after projection and using that to avoid viscosity from converging velocity within a cell. The code for that is show below:
 
 ```cpp title="velocity transfer: grid to particle"
 void update_particle(int i, field_e_t field, float flip) {
@@ -280,6 +284,13 @@ void update_particle(int i, field_e_t field, float flip) {
   }
 }
 ```
+
+By using linear interpolation (lerp), where $lerp(a, b, t) = a + (b-a)t$, we can blend the results of PIC and FLIP to achieve a realistic simulation.
+
+:::note
+PIC introduces viscosity as particles in same area blend their velocity
+FLIP introduces noise as it is an integrator of sorts
+:::
 
 This one was really challenging, and I kept getting errors with the particles flying out of bounds or division by zero weight. I would often think that I had fixed them, and then they would come back affecting different particles instead.
 
