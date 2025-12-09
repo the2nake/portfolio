@@ -1,14 +1,14 @@
 ---
 title: 'Kalman Filter for Dead Wheel Odometry'
 published: 2024-07-25
-draft: false
+draft: true
 toc: true
 tags: ['sensors', 'controls']
 description: 'A project part of the 2024-25 VEX Robotics season. I created a Kalman filter to reduce errors in position tracking over time and improve motion repeatability.'
 author: ['the2nake']
 ---
 
-This project is what started my foray into some control theory beyond PID. Admittedly, Kalman filtering (even multidimensionally) is not a very complicated concept, and the implementation I made was neither elegant nor efficient. In personal terms, however, the completion of this project was a landmark moment.
+This project is what started my foray into some control theory beyond PID. Admittedly, Kalman filtering (even multi-dimensionally) is not a very complicated concept, and the implementation I made was neither elegant nor efficient. In personal terms, however, the completion of this project was a landmark moment.
 
 This was the first time I really understood linear algebra, and the first time I applied further mathematics to a robotic application.
 
@@ -16,7 +16,7 @@ This was the first time I really understood linear algebra, and the first time I
 
 We track robot position with omnidirectional wheels (omniwheels) and odometry. Odometry operates using a dead-reckoning approach: it adds robot-frame displacement vectors measured by the wheels to a tracked global displacement vector. An IMU provides the angle needed to perform the change of basis.
 
-Previously, our team used 220mm travel omniwheels, which provided strong position tracking due to their even roundness and low friction laterally. We switched to smaller 160mm travel omniwheels to accommodate the reduced floorspace of a new overall design for the robot.
+Previously, our team used 220mm travel omniwheels, which provided strong position tracking due to their even roundness and low friction laterally. We switched to smaller 160mm travel omniwheels to accommodate the reduced space in a new overall design.
 
 We found that the construction of the new wheels caused poorer tracking performance. The smaller wheels had only four roller axes, which caused friction problems when wheel rollers could be angled up to 45 degrees from the ground.
 

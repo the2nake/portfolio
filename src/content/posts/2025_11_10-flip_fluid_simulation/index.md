@@ -206,9 +206,79 @@ On the bright side, it looks alright.
 
 Now, it's time to wrap up the final step. Like for density above, bilinear interpolation is our friend, although the coordinate system is a bit different. It is of particular importance to identify the correct corners to interpolate from, as they will differ for `v1` and `v2` (x and y velocities).
 
-```cpp title="velocity transfer"
 [insert diagram here]
-[insert code here]
+
+Here's a skeleton of what the implementation for transferring particle velocities to the flow rate grid would look like. I had to omit a lot of the details, but the essence is to store bilinear interpolation weights at the 4 closest flow rate boundaries. This will be used both for taking the weighted average of particle velocities surrounding a boundary and to reconstruct the particle velocity after the flow rates are balanced in the projection step.
+
+```cpp title="velocity transfer: particle to grid"
+typedef struct {
+  int i;    // index in v1/v2
+  float w;  // influence on particle (and vice versa)
+} vel_weight_t;
+
+void v_to_grid() {
+  // reset velocity field weights
+  // set cell states based on particle positions
+
+  for (int i = 0; i < n_particles; ++i) {
+    compute_weights(&particles[i], &vel_ws[8 * i]);
+
+    for (int j = 0; j < 4; ++j) {
+      // fill the boundary with velocity and weight
+      add_weight(v1_e, &vel_ws[8 * i + j], particles[i].v1);
+      add_weight(v2_e, &vel_ws[8 * i + j + 4], particles[i].v2);
+    }
+  }
+
+  // at each cell boundary, divide each flow rate by its weight
+}
+
+// populate vel_ws with:
+//   the weights exerted by the particle
+//   the indices of relevant cell boundaries
+void compute_weights(particle_t *p, vel_weight_t *vel_w);
+
+void add_weight(field_e_t field, vel_weight_t *vel_w, float vel) {
+  // set is_air = velocity between two cells with air state
+
+  if (is_air) {
+    vf[vel_w->i] = NAN;
+    wf[vel_w->i] = 0.f;
+    vel_w->w = 0.f;  // mark influence on particle as invalid
+  } else {
+    vf[vel_w->i] += vel_w->w * vel;
+    wf[vel_w->i] += vel_w->w;
+  }
+}
+```
+
+Once that is done, the transfer process in reverse is dead easy. For each particle, take the weighted average of the four corner flow rates using the weights stored in `vel_w`. This is the PIC or particle-in-cell method. The FLiP method calls for computing the change in flow rate after projection and using that to avoid viscosity from converging velocity within a cell. The code for that is show below:
+
+```cpp title="velocity transfer: grid to particle"
+void update_particle(int i, field_e_t field, float flip) {
+  assert(-0.01 <= flip && flip <= 1.01);
+
+  vel_weight_t *vel_w = &vel_ws[8 * i + (field == v2_e) * 4];
+  float *vf           = field == v1_e ? v1               : v2;
+  float *v_prior      = field == v1_e ? v1_prior         : v2_prior;
+  float *v_out        = field == v1_e ? &particles[i].v1 : &particles[i].v2;
+  float v_pic = 0.f, v_flip = 0.f, w = 0.f;
+
+  for (int j = 0; j < 4; ++j, ++vel_w) {
+    if (vel_w->w == 0.f || isnan(vf[vel_w->i])) continue;
+
+    v_pic += vf[vel_w->i] * vel_w->w;
+    v_flip += (vf[vel_w->i] - v_prior[vel_w->i]) * vel_w->w;
+    w += vel_w->w;
+  }
+
+  if (w > 0.f) {
+    v_flip = *v_out + v_flip / w;
+    v_pic = v_pic / w;
+
+    *v_out = lerp(v_pic, v_flip, flip);
+  }
+}
 ```
 
 This one was really challenging, and I kept getting errors with the particles flying out of bounds or division by zero weight. I would often think that I had fixed them, and then they would come back affecting different particles instead.
