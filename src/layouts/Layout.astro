@@ -17,7 +17,7 @@ interface Props {
 
 const { title, description, tags, author } = Astro.props
 const pageUrl = new URL(Astro.url.pathname, Astro.site).href.replace(/\/$/, '') // Remove trailing slash for consistency
-const pageType = Astro.url.pathname.startsWith('/posts') ? 'article' : 'website'
+const pageType = Astro.url.pathname.startsWith(`${siteConfig.base}/posts`) ? 'article' : 'website'
 const pageTitle = title
   ? `${title.toLowerCase()} | ${siteConfig.title}`
   : siteConfig.title
