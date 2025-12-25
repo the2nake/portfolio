@@ -26,7 +26,6 @@ const pageAuthor = author || siteConfig.author
 const pageImage =
   pageType === 'article'
     ? Astro.url.origin +
-      siteConfig.base +
       Astro.url.pathname.replace(/\/posts\//, '/social-cards/') +
       '.png'
     : `${Astro.url.origin + siteConfig.base}/social-cards/__default.png`
