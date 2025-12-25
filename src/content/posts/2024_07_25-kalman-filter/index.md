@@ -8,7 +8,7 @@ description: 'A project part of the 2024-25 VEX Robotics season. I created a Kal
 author: 'the2nake'
 ---
 
-# [TODO] make this a short post and do the project in further detail in the current time (writing docs without coding is dumb and you're simulating the past anyway)
+## [TODO] make this a short post and do the project in further detail in the current time (writing docs without coding is dumb and you're simulating the past anyway)
 
 This project is what started my foray into some control theory beyond PID. Admittedly, Kalman filtering (even multi-dimensionally) is not a very complicated concept, and the implementation I made was neither elegant nor efficient. In personal terms, however, the completion of this project was a landmark moment.
 
@@ -83,7 +83,7 @@ Here it is, where $\bold{F}_x$, $\bold{F}_y$, and $\bold{F}_\theta$ correspond t
 $$
 \bold{Q} = \\
 \begin{bmatrix} \\
-\bold{F}_x\begin{bmatrix} 0 & 0 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & \sigma^2_{\ddot x}\end{bmatrix}\bold{F}^T_x & & \\ 
+\bold{F}_x\begin{bmatrix} 0 & 0 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & \sigma^2_{\ddot x}\end{bmatrix}\bold{F}^T_x & & \\
 & \bold{F}_y\begin{bmatrix} 0 & 0 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & \sigma^2_{\ddot y}\end{bmatrix}\bold{F}^T_y  & \\
 & & \bold{F}_\theta\begin{bmatrix}0 & 0 \\ 0 & \sigma^2_{\dot \theta}\end{bmatrix}\bold{F}^T_\theta\end{bmatrix}
 $$

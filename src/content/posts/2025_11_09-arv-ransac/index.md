@@ -18,7 +18,6 @@ This was my first completed project as part of the U-M ARV club. Unlike others t
 
 Check the `algorithms/algorithm_37bec7ux/src/ransac` directory for the code.
 
-
 ## first steps
 
 This project was motivated by needing to determine obstacles without needing to categorise them. The grid output was chosen by the people doing navigation motion planning for its utility for pathfinding.
@@ -51,7 +50,7 @@ My personal approach is to always prototype possible solutions before deciding o
 In this vein, RANSAC was our first pick to prototype, as its ease of implementation would help us gauge how complicated our algorithm would need to be. We eventually found it to be sufficiently robust, and saw no need to investigate other techniques.
 
 :::note
-There *is* an optimal solution to plane fitting, given by $\vec{x^*}=R^{-1}Q^T\vec{b}$ (an equation I will not unpack, but it exists). However, this scales *spectacularly* poorly when applied to the >300k points in a 720p image.
+There _is_ an optimal solution to plane fitting, given by $\vec{x^*}=R^{-1}Q^T\vec{b}$ (an equation I will not unpack, but it exists). However, this scales _spectacularly_ poorly when applied to the >300k points in a 720p image.
 :::
 
 ### ransac
