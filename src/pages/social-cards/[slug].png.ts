@@ -68,7 +68,7 @@ const markup = (title: string, pubDate: string | undefined, author: string) =>
           : ''
       }
       <div tw="flex flex-1 flex-col max-w-full justify-center items-center">
-        ${pubDate ? `<p tw="text-3xl max-w-full text-[${accent}]">${pubDate}</p>` : ''}
+        ${pubDate ? `<p tw="text-3xl max-w-full text-[${accent}]">${pubDate}</p>` : 'test'}
         <h1 tw="text-6xl my-14 text-center leading-snug">${title}</h1>
         ${author !== title ? `<p tw="text-4xl text-[${accent}]">${author}</p>` : ''}
       </div>
