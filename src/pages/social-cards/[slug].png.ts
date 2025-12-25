@@ -84,7 +84,7 @@ export async function GET(context: APIContext) {
   const png = new Resvg(svg).render().asPng()
   return new Response(png, {
     headers: {
-      'Cache-Control': 'no-cache', //'public, max-age=3600, immutable',
+      'Cache-Control': 'no-store', //'public, max-age=3600, immutable',
       'Content-Type': 'image/png',
     },
   })
