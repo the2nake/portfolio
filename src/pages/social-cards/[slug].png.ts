@@ -69,7 +69,7 @@ const markup = (title: string, pubDate: string | undefined, author: string) =>
       }
       <div tw="flex flex-1 flex-col max-w-full justify-center items-center">
         ${pubDate ? `<p tw="text-3xl max-w-full text-[${accent}]">${pubDate}</p>` : ''}
-        <h1 tw="text-6xl my-14 text-center leading-snug">${title}</h1>
+        <h1 tw="text-6xl my-14 text-center leading-snug">random stuff: ${title}</h1>
         ${author !== title ? `<p tw="text-4xl text-[${accent}]">${author}</p>` : ''}
       </div>
     </div>
@@ -78,13 +78,13 @@ const markup = (title: string, pubDate: string | undefined, author: string) =>
 type Props = InferGetStaticPropsType<typeof getStaticPaths>
 
 export async function GET(context: APIContext) {
-  return new Response(null);
+  // return new Response(null);
   const { pubDate, title, author } = context.props as Props
   const svg = await satori(markup(title, pubDate, author) as ReactNode, ogOptions)
   const png = new Resvg(svg).render().asPng()
   return new Response(png, {
     headers: {
-      'Cache-Control': 'public, max-age=3600, immutable',
+      'Cache-Control': 'no-cache', //'public, max-age=3600, immutable',
       'Content-Type': 'image/png',
     },
   })
