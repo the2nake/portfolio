@@ -10,7 +10,7 @@ const config: SiteConfig = {
   description:
     'the2nake\'s portfolio',
   // The author of the site, used in the footer, SEO, and RSS feed.
-  author: ['the2nake'],
+  author: 'the2nake',
   // Keywords for SEO, used in the meta tags.
   tags: ['the2nake', 'portfolio', 'blog'],
   // Path to the image used for generating social media previews.

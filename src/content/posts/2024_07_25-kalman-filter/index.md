@@ -5,8 +5,10 @@ draft: true
 toc: true
 tags: ['sensors', 'controls']
 description: 'A project part of the 2024-25 VEX Robotics season. I created a Kalman filter to reduce errors in position tracking over time and improve motion repeatability.'
-author: ['the2nake']
+author: 'the2nake'
 ---
+
+# [TODO] make this a short post and do the project in further detail in the current time (writing docs without coding is dumb and you're simulating the past anyway)
 
 This project is what started my foray into some control theory beyond PID. Admittedly, Kalman filtering (even multi-dimensionally) is not a very complicated concept, and the implementation I made was neither elegant nor efficient. In personal terms, however, the completion of this project was a landmark moment.
 
@@ -74,7 +76,7 @@ Extrapolates the covariance of the state estimate computed above. $\bold{F}\bold
 
 Multiplying by $\bold{F}$ on the covariance of $\hat{\bold{x}}$ is kind of analogous to how scalar multiplication has a quadratic effect on the variance. The actual expansion, based on $\bold{P}_{k|k}=E((\bold{e}_{k|k})(\bold{e}_{k|k})^T)$ where $\bold{e}_{k|k}=\bold{x}_{k|k}-\hat{\bold{x}}_{k|k}$, is not too insightful.
 
-$\bold{Q}$ is error that is introduced through incorrect modelling). We computed this by passing a tunable noise through our transition model. In hindsight, a control input from intended maneuvers would've been perfect here.
+$\bold{Q}$ is error that is introduced through incorrect modelling. We computed this by passing a tunable noise through our transition model. In hindsight, a control input from intended maneuvers would've been perfect here.
 
 Here it is, where $\bold{F}_x$, $\bold{F}_y$, and $\bold{F}_\theta$ correspond to the blocks in matrix $\bold{F}_\theta$.
 

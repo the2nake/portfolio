@@ -170,7 +170,7 @@ export interface SiteConfig {
   font: string
   title: string
   description: string
-  author: string[]
+  author: string
   socialCardAvatarImage: string
   tags: string[]
   pageSize: number

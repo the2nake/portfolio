@@ -5,5 +5,5 @@ draft: true
 toc: true
 tags: ['tags']
 description: 'Description.'
-author: ['the2nake']
+author: 'the2nake'
 ---
