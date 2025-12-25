@@ -1,7 +1,7 @@
 ---
 title: 'Obstacle segmentation with RANSAC'
 published: 2025-12-13
-draft: false
+draft: true
 toc: true
 tags: ['sensors', 'computer-vision']
 description: 'An algorithm written for U-M ARV 2025-2026. We used random sample consensus (RANSAC) to segment obstacles from the ground.'
