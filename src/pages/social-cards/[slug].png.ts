@@ -61,12 +61,11 @@ const markup = (title: string, pubDate: string | undefined, author: string) =>
   html(`<div tw="flex flex-col max-w-full justify-center h-full bg-[${bg}] text-[${fg}] p-12">
     <div style="border-width: 12px; border-radius: 80px;" tw="flex items-center max-w-full p-8 border-[${accent}]/30">
       ${
-        // avatarBase64
-        //   ? `<div tw="flex flex-col justify-center items-center w-1/3 h-100">
-        //     <img src="${avatarBase64}" tw="flex w-full rounded-full border-[${accent}]/30" />
-        // </div>`
-        //   : ''
-        ''
+        avatarBase64
+          ? `<div tw="flex flex-col justify-center items-center w-1/3 h-100">
+            <img src="${avatarBase64}" tw="flex w-full rounded-full border-[${accent}]/30" />
+        </div>`
+          : ''
       }
       <div tw="flex flex-1 flex-col max-w-full justify-center items-center">
         ${pubDate ? `<p tw="text-3xl max-w-full text-[${accent}]">${pubDate}</p>` : ''}
@@ -84,7 +83,7 @@ export async function GET(context: APIContext) {
   const png = new Resvg(svg).render().asPng()
   return new Response(png, {
     headers: {
-      'Cache-Control': 'public, max-age=31536000, immutable',
+      'Cache-Control': 'public, max-age=5, immutable',
       'Content-Type': 'image/png',
     },
   })
