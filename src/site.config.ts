@@ -5,7 +5,7 @@ const config: SiteConfig = {
   site: 'https://the2nake.github.io/',
   base: '/portfolio',
   // The name of your site, used in the title and for SEO.
-  title: 'the2nake',
+  title: 'portfolio',
   // The description of your site, used for SEO and RSS feed.
   description:
     'the2nake\'s portfolio',
