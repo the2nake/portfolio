@@ -78,12 +78,13 @@ const markup = (title: string, pubDate: string | undefined, author: string) =>
 type Props = InferGetStaticPropsType<typeof getStaticPaths>
 
 export async function GET(context: APIContext) {
+  return new Response(null);
   const { pubDate, title, author } = context.props as Props
   const svg = await satori(markup(title, pubDate, author) as ReactNode, ogOptions)
   const png = new Resvg(svg).render().asPng()
   return new Response(png, {
     headers: {
-      'Cache-Control': 'public, max-age=5, immutable',
+      'Cache-Control': 'public, max-age=3600, immutable',
       'Content-Type': 'image/png',
     },
   })
