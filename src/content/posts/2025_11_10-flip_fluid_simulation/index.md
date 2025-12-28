@@ -285,7 +285,7 @@ void update_particle(int i, field_e_t field, float flip) {
 }
 ```
 
-By using linear interpolation (lerp), where $lerp(a, b, t) = a + (b-a)t$, we can blend the results of PIC and FLIP to achieve a realistic simulation.
+By using linear interpolation (lerp), where $\text{lerp}(a, b, t) = a + (b-a)t$, we can blend the results of PIC and FLIP to achieve a realistic simulation.
 
 :::note
 PIC introduces viscosity as particles in same area blend their velocity
