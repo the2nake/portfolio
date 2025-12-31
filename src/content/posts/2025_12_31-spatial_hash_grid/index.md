@@ -18,7 +18,7 @@ First, we have to figure out how to check for collisions between a pair of parti
 
 The so-called "naive" approach to extend this would be to check collisions between every pair of particles. This would run in $O(n^2)$ time, where $n$ is the number of particles checked. With only 1000 particles, 1 million pairs would need to be checked!
 
-Our principal optimization is this: we need only to check the immediate neigbourhood of each particle. If the particles are arranged in such a way that separates particles based on their location, we can skip the distant pairs without ever performing a distance check.
+Our principal optimisation is this: we need only to check the immediate neigbourhood of each particle. If the particles are arranged in such a way that separates particles based on their location, we can skip the distant pairs without ever performing a distance check.
 
 To do this, we can place the particles within a grid. If the grid has a grid spacing equal to the width of the particles, particles not in adjacent grid cells can never interact. One such grid is shown below (Fig. 1).
 
