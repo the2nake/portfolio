@@ -4,7 +4,7 @@ published: 2025-12-31
 draft: false
 toc: true
 tags: ['algorithm']
-description: 'Hash grid data structure and implementation in C. It greatly improves collision detection efficiency using a divide-and-conquer approach.'
+description: 'Hash grid data structure description and implementation concerns. It greatly improves collision detection efficiency using a divide-and-conquer approach.'
 author: 'the2nake'
 ---
 
