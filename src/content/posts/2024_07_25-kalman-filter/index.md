@@ -3,7 +3,7 @@ title: 'Kalman Filter for Dead Wheel Odometry'
 published: 2024-07-25
 draft: true
 toc: true
-tags: ['sensors', 'controls']
+tags: ['project', 'sensors', 'controls']
 description: 'A project part of the 2024-25 VEX Robotics season. I created a Kalman filter to reduce errors in position tracking over time and improve motion repeatability.'
 author: 'the2nake'
 ---

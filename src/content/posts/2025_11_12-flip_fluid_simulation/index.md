@@ -3,7 +3,7 @@ title: 'FLIP Fluid Simulation'
 published: 2025-11-12
 draft: false
 toc: true
-tags: ['simulation']
+tags: ['project']
 description: 'FLuid Implicit Particle technique in C with SDL. This is underlying work for a clone of the fluid simulation pendant by mitxela.'
 author: 'the2nake'
 ---

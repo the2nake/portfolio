@@ -3,7 +3,7 @@ title: 'Obstacle segmentation with RANSAC'
 published: 2025-12-13
 draft: true
 toc: true
-tags: ['sensors', 'computer-vision']
+tags: ['project', 'sensors']
 description: 'An algorithm written for U-M ARV 2025-2026. We used random sample consensus (RANSAC) to segment obstacles from the ground.'
 author: 'the2nake, joshua kin, edison zhou'
 ---
@@ -65,14 +65,43 @@ In our case, we use it to detect the primary flat surface in the camera view (th
 
 Though iterative sampling is quite efficient, calculating the error metric for the plane fit still requires processing every single point in the image. As this is undesirable, we can reduce the amount we process by scaling down the depth image (pooling).
 
-There are many ways to do pooling, but we simply take the average of the depth data in a rectangular section and map it into a single pixel of a pooled image. The area of this rectangular section, called a "kernel", determines the factor by which the error metric computation is sped up. A large kernel leads to a smaller pooled image, which is easier to process.
+There are many ways to do pooling, but we simply take the average of the depth data in a rectangular section and map it into a single pixel of a pooled image. This section, called a "kernel", determines the factor by which the error metric computation is sped up, as a larger kernel creates a smaller (and easier to process) pooled image.
 
 ### TODO - ADD GRAPHIC EXPLAINING POOLING KERNEL
 
 :::tip
-The choice of kernel shape is quite important. Larger kernels are preferably to speed up the error metric computation during RANSAC, but they make the plane fit less accurate. To avoid sacrificing accuracy, we used a rectangular `1x10` pooling kernel.
+The choice of kernel shape is quite important. Larger kernels speed up the error metric computation during RANSAC, but they make the plane fit less accurate. To avoid sacrificing accuracy, we used a rectangular `1x10` pooling kernel.
 
 This works because our cameras are mounted parallel to the horizon, which makes the depth data going horizontally across an image almost constant. With this pooling kernel, our metric calculation is 10x faster for no cost.
 :::
 
 Oftentimes, the best way to optimise is to do less :upside_down_face:.
+
+## plane detection
+
+### pixel space vs. camera space
+
+First, it is important to determine how any point on the depth image (pixel space) corresponds to a point in the real world (camera space).
+
+The camera space is the coordinate space in the real world in the reference frame of the camera. Though it is similar to the pixel space of the depth image, the x- and y-coordinates in camera space ($x_c$ and $y_c$) are dependent on the depth.
+
+This distinction can be visualised by imagining the line within the camera frustrum that corresponds to a pixel. As photography is a mapping of 3-d space onto a 2-d image, each pixel location could correspond to an infinite number of $(x_c, y_c)$ coordinates. In a specific depth image, the depth value at a pixel's location would determine which real coordinates are used.
+
+We convert the coordinates using formulae explained in section 3 of [Focal Length and Intrinsic Camera Parameters | Baeldung on Computer Science](https://www.baeldung.com/cs/focal-length-intrinsic-camera-parameters). The relevant equations are shown below.
+
+$$
+\begin{align}
+x_p&=f_x\frac{x_c}{z}+c_x \\
+y_p&=f_y\frac{y_c}{z}+c_y
+\end{align}
+$$
+
+:::important
+These transformations are nonlinear, as depth $z$ varies with position $(x_p, y_p)$ in the image. They cannot be modelled either; as will become apparent later, the real coordinates of the obstacle pixels are also important.
+:::
+
+### plane equation in pixel space
+
+The nonlinear relationship mentioned above also impacts how the pixel space plane is found. If we consider the general plane equation in camera space (which is just a rotation of real world coordinates), the
+
+talk about mistake made when assuming linear fit from ransac.
