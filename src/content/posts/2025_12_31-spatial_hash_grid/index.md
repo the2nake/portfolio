@@ -6,6 +6,9 @@ toc: true
 tags: ['algorithm']
 description: 'Hash grid data structure description and implementation concerns. It greatly improves collision detection efficiency using a divide-and-conquer approach.'
 author: 'the2nake'
+coverImage:
+  src: './spatial_hg_cover.jpg'
+  alt: 'Every one of the thousands of dots in this image can be checked for collision.'
 ---
 
 Happy New Year's Eve! This post concerns the solution to a problem mentioned in a previous post on simulating a fluid using FLIP: How can we detect (and separate) collisions between large amounts of uniform circular particles?
