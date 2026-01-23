@@ -8,7 +8,7 @@ description: 'FLuid Implicit Particle technique in C with SDL. This is underlyin
 author: 'the2nake'
 ---
 
-Writing simulations isn't one of my main interests, per se, but it is pretty useful for controls engineering. Also, I couldn't get my hands on a [pendant made by mitxela](https://mitxela.com/projects/fluid-pendant) in time, so I plan to make my own version at some point. Hence, I decided to do this FLIP (**FL**uid **I**mplicit **P**article) simulation, using [a video](https://www.youtube.com/watch?v=XmzBREkK8kY) by Ten Minute Physics as a reference.
+Writing simulations isn't one of my main interests, per se, but it is pretty useful for controls engineering. Also, I couldn't get my hands on a [pendant made by mitxela](https://mitxela.com/projects/fluid-pendant) in time, so I plan to make my own version at some point. Hence, I decided to do this FLIP (**FL**uid **I**mplicit **P**article) simulation, using the [explanation](https://www.youtube.com/watch?v=XmzBREkK8kY) by Ten Minute Physics.
 
 I honestly had some trouble replicating the simulation behaviour. For no discernible reason, my simulation has a bit higher viscosity than expected, and some overcompression of particles at the bottom. Though I am not totally happy with the result, I haven't yet found how to fix it. I'll make an update once I do.
 
