@@ -1,5 +1,5 @@
 ---
-title: 'Theta*: Smoother paths for real-world navigation'
+title: 'Theta*: smoother pathfinding'
 published: 2026-01-23
 draft: false
 toc: true

@@ -1,5 +1,5 @@
 ---
-title: 'FLIP Fluid Simulation'
+title: 'FLIP fluid simulation'
 published: 2025-11-12
 draft: false
 toc: true
