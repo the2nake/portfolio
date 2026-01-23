@@ -3,7 +3,7 @@ title: 'Obstacle segmentation with RANSAC'
 published: 2025-12-13
 draft: true
 toc: true
-tags: ['project', 'sensors']
+tags: ['project']
 description: 'An algorithm written for U-M ARV 2025-2026. We used random sample consensus (RANSAC) to segment obstacles from the ground.'
 author: 'the2nake, joshua kin, edison zhou'
 ---

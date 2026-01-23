@@ -1,5 +1,5 @@
 ---
-title: 'Particle Collisions with Spatial Hash Grid'
+title: 'Detecting collisions with spatial hash grid'
 published: 2025-12-31
 draft: false
 toc: true
