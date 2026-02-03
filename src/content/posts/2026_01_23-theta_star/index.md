@@ -17,7 +17,7 @@ Another interesting algorithm, found this one in my ever-lengthening Watch Later
 **pathfinding**: the process of finding the shortest path between two nodes in a graph (the mathematical structure). Like in many practical applications, our graph represents a physical space with obstacles as a grid whose squares (nodes) which can be traversable (ground) or not (obstacle). From any square, we can go its eight neighbours.
 :::
 
-Though Theta\* is meant to be used on top of A\*, which is more efficient in common physical environments (which has no variation in cost when moving between locations), the concept can also be identically applied to standard Dijkstra. My implementation of the algorithm can be found in the following repository:
+Though Theta\* is meant to be used on top of A\*, which is more efficient in common physical environments (which have little variation in cost when moving between locations), the concept can also be identically applied to standard Dijkstra. My implementation of the algorithm can be found in the following repository:
 
 ::github{repo="the2nake/theta-star"}
 
