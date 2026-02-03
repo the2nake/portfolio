@@ -1,14 +1,14 @@
 ---
-title: 'Obstacle segmentation with RANSAC'
+title: 'Fusing depth vision for autonomous navigation'
 published: 2025-12-13
 draft: true
 toc: true
 tags: ['project']
-description: 'An algorithm written for U-M ARV 2025-2026. We used random sample consensus (RANSAC) to segment obstacles from the ground.'
-author: 'the2nake, joshua kin, edison zhou'
+description: 'Most of my work for U-M ARV during 2025-26. We used, among other techniques, RANSAC and point clouds to segment obstacles from the ground.'
+author: 'the2nake, joshua kin, edison zhou, arnav'
 ---
 
-This was my first completed project as part of the U-M ARV club. Unlike others that I've done, the direction for this project was more or less set by the "higher-ups", so to speak. Our aims were to create an occupancy grid with sides of 5 cm which marked the driveable areas by the robot.
+This was my first project as part of the U-M ARV club. Unlike others that I've done, the direction for this project was more or less set by the "higher-ups", so to speak. Our aims were to create an occupancy grid with sides of 5 cm which marked the driveable areas by the robot.
 
 ### TODO - INSERT SOME VISUALS HERE
 
