@@ -96,6 +96,44 @@ std::vector<coord> theta_star(grid& g, coord start, coord end) {
 
 Of course, `g.visible()` has to be implemented. In the demo, I used [Bresenham's line algorithm](https://deepnight.net/tutorial/bresenham-magic-raycasting-line-of-sight-pathfinding/), a line rasterisation approach that uses only integer arithmetic.
 
+The key idea is to express a line in standard form and divide it into half-planes ($ax+by+c \le 0$ would be the negative half-plane) that determine if the next pixel drawn should move only along the x-axis, or also move up at the same time. Notice that this approach will only handle lines with slope $\left|\frac{\Delta x}{\Delta y}\right| \le 1$.
+
+The code below won't include that exact equation because of algebraic simplification. Another thing the snippet below does is handle orientation changes by defining a major (`M`) and minor (`m`) distance to draw the line, and a major step (`dM`) and minor step (`dm`) that is applied to shift along to the next pixel's coordinate.
+
+```cpp title="bresenham line of sight"
+bool grid::visible(coord a, coord b) {
+  if (!in_bounds(a) || !in_bounds(b)) return false;
+
+  coord curr = a;
+  int dy = b.first - a.first;
+  int dx = b.second - a.second;
+
+  int M = std::abs(dx);
+  int m = std::abs(dy);
+  coord dM = {0, dx < 0 ? -1 : 1};
+  coord dm = {dy < 0 ? -1 : 1, 0};
+
+  if (m > M) {
+    std::swap(dm, dM);
+    std::swap(m, M);
+  }
+
+  for (int i = 0, j = 0; i <= M; ++i) {
+    if (operator[](curr).is_wall()) return false;
+
+    // within the negative half, the true line is above
+    if (2 * (M * j - m * i - m) + M <= 0) {
+      ++j;
+      curr.first += dm.first;
+      curr.second += dm.second;
+    }
+    curr.first += dM.first;
+    curr.second += dM.second;
+  }
+  return true;
+}
+```
+
 ## animated demo
 
 I'm currently working a nice way to "inject" visualisation steps into an algorithm to see how it is working (and maybe help debug it). Once that's figured out, I'll update this section with a GIF of that.
