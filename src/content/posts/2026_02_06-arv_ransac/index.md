@@ -128,6 +128,6 @@ I was surprised to see that the pixel space coordinates were linear to $\frac{1}
 
 ![incorrect ransac plane fit](./arv_ransac_naive.jpg "Linear fit before considering space transforms")
 
-In retrospect, that neat curve should've rung alarm bells. You can't catch everything alone, I suppose. And here is the plane fit algorithm after compensating correctly.
+In retrospect, I should've known that neat curve was not a coincidence. You can't catch everything alone, I suppose. And here is the plane fit algorithm after compensating correctly.
 
 ![correct ransac plane fit](./arv_ransac_corrected.jpg "Compensating for camera transforms gives correct model")
