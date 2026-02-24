@@ -60,9 +60,10 @@ const config: SiteConfig = {
     // To use light-dark-auto mode, only include a light and a dark theme in that order.
     include: [
       'github-light-high-contrast',
+      'min-dark',
       // 'catppuccin-latte',
-      'github-dark',
-      //'catppuccin-mocha',
+      // 'github-dark',
+      // 'catppuccin-mocha',
     ],
     // include: [
     //   'andromeeda',
@@ -139,17 +140,24 @@ const config: SiteConfig = {
       //   note: '#83AEFFFF',
       // },
       // Make the GitHub dark theme a little cuter
-      // 'github-light': {
+      // 'github-dark': {
       //   accent: 'magenta',
       //   heading1: 'magenta',
       //   heading2: 'magenta',
-      //   heading3: 'magenta',
+      //   heading3: 'white',
       //   heading4: 'magenta',
       //   heading5: 'magenta',
       //   heading6: 'magenta',
       //   separator: 'magenta',
       //   link: 'list',
       // },
+      // Heading colors for min-dark
+      'min-dark': {
+        heading3: '#fbb',
+        heading4: '#fbb',
+        heading5: '#fbb',
+        heading6: '#fbb',
+      },
     },
   },
   // Social links to display in the footer.
@@ -157,7 +165,7 @@ const config: SiteConfig = {
     github: 'https://github.com/the2nake',
     mastodon: '',
     email: 'yxcxhnhs4@mozmail.com',
-    linkedin: 'https://github.com/the2nake',
+    linkedin: '',
     bluesky: '',
     twitter: '',
     rss: false, // Set to true to include an RSS feed link in the footer
