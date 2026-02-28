@@ -1,26 +1,24 @@
 ---
 title: 'Depth vision for autonomous navigation (ARV)'
-published: 2026-02-06
-draft: true
+published: 2026-02-27
+draft: false
 toc: true
 tags: ['project']
 description: 'Most of my work for U-M ARV during 2025-26. We used, among other techniques, RANSAC and point clouds to segment obstacles from the ground.'
-author: 'the2nake, joshua kin, edison zhou, arnav'
+author: 'the2nake, joshua kin, edison zhou'
 ---
 
 This was my first project as part of the U-M ARV club. Unlike others that I've done, the direction for this project was more or less set by the "higher-ups", so to speak. Our aim was to create an occupancy grid with sides of 5 cm which marked the driveable areas by the robot.
 
+As of 2026-02-27, this project is still ongoing (though nearing completion). Because the state of camera merging is not truly finalised, I'll only talk about creating an occupancy grid from one camera's output here.
+
 ::github{repo="umigv/UMARV-CV-ScenePerception"}
 
-Check the `algorithms/algorithm_37bec7ux/src/ransac` directory for the code.
+Code for this project can be found in the above repository, in the `algorithms/algorithm_37bec7ux/src/ransac` directory.
 
-## objectives
+## project context
 
-This project was motivated by needing to determine obstacles without needing to categorise them. The final deliverable would be a ROS (Robot Operating System) node to publish a matrix that represented square areas on the ground as well as if they were occupied by some obstacle.
-
-:::note
-We kind of took our sweet time. Due to various factors, we only started planning on 25-10-19, and produced the first concepts around a week later.
-:::
+This project was motivated by needing to determine obstacles without needing to categorise them using AI. The final deliverable would be a ROS (Robot Operating System) node to publish a matrix that represented square areas on the ground as well as if they were occupied by some obstacle.
 
 ### constraints
 
@@ -30,9 +28,9 @@ We kind of took our sweet time. Due to various factors, we only started planning
 
 C++ would've been my language of choice, but we used Python to conform with the rest of the project. By the time we encountered performance limitations, we had too much written to justify switching to C++ and getting the accompanying environment set up (at minimum, telemetry, CMake, SDL, Eigen, OpenCV, ROS).
 
-## goals
+## initial approach
 
-We first set out to simply identify the areas of the ground on the image first, and get a sense of how the depth data might be used. This process is known as image segmentation: we generate a black-and-white image which separates the areas of interest (lane lines and obstacles) and use it to locate obstacles. Here's the kind of result we wanted (and later achieved):
+We first set out to simply identify the areas of the ground on the image first, and get a sense of how the depth data might be used. This process is known as image segmentation: we generate a black-and-white image which separates the areas of interest (lane lines and obstacles) and use it to locate obstacles. Here's the kind of result we wanted:
 
 ![example image segmentation mask](./arv_ransac_example_mask.png "Camera footage and generated driveable area mask (white)")
 
@@ -40,15 +38,15 @@ In the above picture, the white areas are the areas on the ground. We do highlig
 
 ## ransac
 
-I like to just try stuff first and worry later. RANSAC (random sample consensus) was chosen because it's easy to implement, and we never saw need to change it. It's not optimal, but it's fast.
+I like to just try stuff first and worry later. RANSAC (random sample consensus) was chosen because it's easy to implement, and we never saw need to change it.
 
 1. Repeatedly sample some points
 2. Create a model for those points
 3. Evaluate model's "fit" for the dataset using mean squared error
 
-That last step is also used to determine what's part of the ground and what's not.
+That last step is also used to determine which pixels are part of the ground (the inliers).
 
-We use RANSAC to detect the primary flat surface in the camera view (the ground). A plane is described by $z(x,y)=ax+by+c$, so each iteration samples three datapoints (pixel location with depth).
+We use RANSAC to detect the primary flat surface in the camera view. A plane is described by $z(x,y)=ax+by+c$, so each iteration samples three data points (pixel location with depth).
 
 To avoid converting every pixel into an equivalent point in 3-d space, we performed RANSAC on the image itself (pixel space). I thought this was pretty slick, but the results weren't great at first:
 
@@ -99,17 +97,19 @@ $$
 
 I was surprised to see that the pixel space coordinates were linear to $\frac{1}{z_c}$, the inverse of depth. Full credit to Edison for catching this; I had just assumed the errors we got were a hardware limitation.
 
-In retrospect, I should've known that neat curve was not a coincidence. You can't catch everything alone, I suppose. And here is the plane fit algorithm after compensating correctly.
+In retrospect, I should've known that neat curve was not a coincidence. You can't catch everything alone, I suppose. And here is the plane fit algorithm after compensating correctly:
 
 ![correct ransac plane fit](./arv_ransac_corrected.jpg "Compensating for camera transforms gives correct model")
+
+Generating the mask is pretty simple after this point (pixels less than `thres` from the plane are white). The final mask has been shown [earlier](#initial-approach) so I won't duplicate it here.
 
 ### pooling
 
 Though iterative sampling is efficient, computing the error metric requires processing every single point in the image. To make this more efficient, we downsampled the depth image (a.k.a. pooling).
 
-By averaging a rectangle region of depth values into a single pixel's depth, we work on a smaller image. The size the region determines the speed up factor, as a larger kernel creates a smaller pooled image.
+This is down by averaging a rectangle region of depth values into a single pixel's depth, creating a smaller image. The size the region determines the speed up factor; a larger kernel creates a smaller pooled image.
 
-:::tip
+:::info
 Having a large range of depth values being averaged will degrade RANSAC performance. We used a `1x16` kernel, which worked well because depth does not vary much along the x-axis.
 :::
 
@@ -117,13 +117,19 @@ Oftentimes, the best way to optimise is to do less :upside_down_face:.
 
 ## occupancy grid
 
-The occupancy grid is made of 50mm squares covering a 5m area in front opoints) that represents the position of every pixel in the real world. Then, we transform that cloud from the camera coordinate system to one aligned with the robot's centre using linear algebra.
+The occupancy grid is made of 50mm squares covering a 5m area in front of the robot. It is populated by mapping every pixel to its corresponding location in 3-d space. Then, we transform that cloud from the camera coordinate system to one aligned with the robot's centre using linear algebra.
+
+:::note
+**Doesn't this approach defeat the purpose of ransac in pixel space?**
+
+Well, yes. I had initially planned to use an image-warping transformation to create the grid, which would not require the point cloud (and hence the reason I tried to avoid creating them). However, I got this approach working first and so stuck with it.
+:::
 
 Here's an example of what this conversion process looks like. The large gaps in the occupancy grid will be rectified afterward.
 
 ![matplotlib point cloud to occupancy grid demo](./arv_ransac_occupancy_grid_demo.png "Generating the point cloud of obstacles and occupancy grid")
 
-I've already covered how we generate the point cloud; those are the camera intrinsics equations. The remaining portion is just using appropriate rotation matrices.
+I've already covered how we generate the point cloud; those are the camera intrinsics equations. The remaining portion is just using appropriate rotation matrices based on the angle between the camera and the ground (which is found using the ground plane model).
 
 Implementing this in Python actually has a lot of details that I wasn't familiar with previously, so here are some code snippets of the interesting techniques.
 
@@ -162,7 +168,7 @@ def pixel_to_real(pixel_cloud, plane_coeffs, intr: Intrinsics, orientation):
     return cloud @ rotate
 ```
 
-Then, we have to figure out the cells with obstacles and cells that are driveable. For this, we used a nice trick involving `np.bincount()` because even list comprehension was too slow.
+Finally, we have to figure out the cells with obstacles and cells that are driveable. For this, we used a nice trick involving `np.bincount()` because even list comprehension was too slow.
 
 ```python title="binning the point cloud"
 def occupancy_grid(real_pc: npt.NDArray, conf: GridConfiguration):
@@ -185,17 +191,27 @@ def occupancy_grid(real_pc: npt.NDArray, conf: GridConfiguration):
     return cnt >= conf.thres # require a minimum of points to fill a cell
 ```
 
-### line-of-sight interpolation
+## line-of-sight interpolation
 
-TODO:
-explain why we need to compute all of the points and not just the visible cells
-draw diagram of known/unknown, ground/obstacle split
+However, the occupancy grid is not complete. There are many cells on the grid, like the cells further away, that will not have any points inside them, like in the below example. We have to infer their state.
 
-#### jit optimisation
+![example of sparse cloud density](./arv_ransac_sparse_cloud_density.png "The grey cells cannot be identified as obstacles or ground")
+
+As the name suggests, our guess is based on a line of sight to the camera. We step along lines originating from the camera (middle of the bottom edge) to all of the points along the edge that it can see.
+
+Every grey cell (unknown state) turns white (driveable) if it is reached after first reaching a driveable cell, and black (obstacle) if it is reached after a blocked cell.
+
+The result of line-of-sight interpolation is shown above in the bottom-right corner.
+
+:::tip
+In retrospect, it would be smarter to make the occupancy grid in inverse, mapping cells on the grid to areas on the image mask instead. This approach would eliminate the need to go back in and fill the gaps, because no gaps can exist.
+:::
+
+### jit optimisation
 
 We first used `skimage.draw.line()` from `scikit-image` to draw lines on the occupancy grid, but we found (using the profiler `snakeviz`) that it was too slow. This is probably due to the library's Cython code.
 
-We replaced their code with JIT (just-in-time compilation) variant, reducing computation time from 20ms to 3ms.
+By replacing that line-drawing with a JITed (just-in-time compiled) variant, we achieved a 7x speedup (from 20ms to 3ms).
 
 ```python title="using jit optimisation"
 from numba import njit
@@ -224,9 +240,30 @@ def create_los_grid(occ, cameras):
     return occ
 ```
 
-## merging two cameras
+## summary
 
-notes:
+Getting to a birds-eye representation of the surroundings requires quite a few steps. From an RGB-D image, we:
 
-- since we are already so slow, we don't want to run a merging algorithm like iterative closest point
--
+1. create a plane model in $(x_p, y_p, z_c^{-1})$ using RANSAC
+2. generate a point cloud of the surroundings using the plane model and camera intrinsics
+3. transform the point cloud to align it with the robot's direction
+4. bin the points into the occupancy grid cells
+5. line-of-sight is used to fill in any remaining gaps
+
+![full pipeline for one frame](./arv_ransac_full_pipeline.png "Full pipeline with the original image (top-left), the mask (top-right), the point clouds (middle row), the raw grid (bottom-left), and the interpolated output (bottom-right)")
+
+Performance is not stellar (likely because I've never used Python to write performant code before) but is passable. The full pipeline processes a frame with 100 iterations in 20-25ms.
+
+### credits
+
+- joshua kin: coded the first ransac prototype and visualisation
+- edison zhou: identified the error in the simple plane model
+- ryan liao: helped optimise python code
+
+## closing thoughts
+
+I'm well aware that our algorithm is not particularly efficient or elegant. I think the masking process is well-designed, but the parts involving the generation of the occupancy grid definitely use a lot of compute to do what can be achieved with a homography or a clever bilinear interpolation.
+
+I am still reasonably proud of the results we have seen, though, and will definitely keep working on this vision pipeline. Depth vision definitely performed better than obstacle detection based on a model like YOLO, since it works with unknown objects too.
+
+Working with the ARV team has been a pleasure, and I think it has definitely increased my appreciation for collaborative projects. The upper-level students have been excellent mentors, and their trust and support have been no small part of why I was able to find success with this original design.
