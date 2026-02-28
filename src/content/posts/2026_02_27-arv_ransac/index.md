@@ -1,11 +1,11 @@
 ---
-title: 'Depth vision for autonomous navigation (ARV)'
+title: 'Depth vision for autonomous navigation'
 published: 2026-02-27
 draft: false
 toc: true
 tags: ['project']
-description: 'Most of my work for U-M ARV during 2025-26. We used, among other techniques, RANSAC and point clouds to segment obstacles from the ground.'
-author: 'the2nake, joshua kin, edison zhou'
+description: 'Most of my work for U-M ARV until March 2026. We used, among other techniques, RANSAC and point clouds to segment obstacles from the ground.'
+author: 'the2nake, joshua, edison, ryan'
 ---
 
 This was my first project as part of the U-M ARV club. Unlike others that I've done, the direction for this project was more or less set by the "higher-ups", so to speak. Our aim was to create an occupancy grid with sides of 5 cm which marked the driveable areas by the robot.
