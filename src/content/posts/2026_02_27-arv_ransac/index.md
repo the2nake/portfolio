@@ -107,7 +107,7 @@ Generating the mask is pretty simple after this point (pixels less than `thres` 
 
 Though iterative sampling is efficient, computing the error metric requires processing every single point in the image. To make this more efficient, we downsampled the depth image (a.k.a. pooling).
 
-This is down by averaging a rectangle region of depth values into a single pixel's depth, creating a smaller image. The size the region determines the speed up factor; a larger kernel creates a smaller pooled image.
+This is down by averaging a rectangular region of depth values into a single pixel's depth, creating a smaller image. The size of that region determines the speed up factor; a larger kernel creates a smaller pooled image.
 
 :::info
 Having a large range of depth values being averaged will degrade RANSAC performance. We used a `1x16` kernel, which worked well because depth does not vary much along the x-axis.
@@ -117,10 +117,10 @@ Oftentimes, the best way to optimise is to do less :upside_down_face:.
 
 ## occupancy grid
 
-The occupancy grid is made of 50mm squares covering a 5m area in front of the robot. It is populated by mapping every pixel to its corresponding location in 3-d space. Then, we transform that cloud from the camera coordinate system to one aligned with the robot's centre using linear algebra.
+The occupancy grid is made of 50 mm squares covering a 25 sqm area in front of the robot. It is populated by mapping every pixel to its corresponding location in 3-d space. Then, we transform that cloud from the camera coordinate system to one aligned with the robot's centre using linear algebra.
 
 :::note
-**Doesn't this approach defeat the purpose of ransac in pixel space?**
+**Doesn't this approach defeat the purpose of RANSAC in pixel space?**
 
 Well, yes. I had initially planned to use an image-warping transformation to create the grid, which would not require the point cloud (and hence the reason I tried to avoid creating them). However, I got this approach working first and so stuck with it.
 :::
@@ -252,7 +252,7 @@ Getting to a birds-eye representation of the surroundings requires quite a few s
 
 ![full pipeline for one frame](./arv_ransac_full_pipeline.png "Full pipeline with the original image (top-left), the mask (top-right), the point clouds (middle row), the raw grid (bottom-left), and the interpolated output (bottom-right)")
 
-Performance is not stellar (likely because I've never used Python to write performant code before) but is passable. The full pipeline processes a frame with 100 iterations in 20-25ms.
+Performance is not stellar (likely because I've never used Python to write performant code before) but is passable. The full pipeline processes a frame with 100 iterations in 20-25 ms.
 
 ### credits
 
