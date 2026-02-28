@@ -256,7 +256,7 @@ Performance is not stellar (likely because I've never used Python to write perfo
 
 ### credits
 
-- joshua kin: coded the first ransac prototype and visualisation
+- joshua kin: co-wrote the first ransac prototype and visualisation
 - edison zhou: identified the error in the simple plane model
 - ryan liao: helped optimise python code
 
