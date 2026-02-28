@@ -1,5 +1,5 @@
 ---
-title: 'Depth vision for autonomous navigation (ARV)'
+title: 'Depth vision for autonomous navigation'
 published: 2026-02-27
 draft: false
 toc: true
