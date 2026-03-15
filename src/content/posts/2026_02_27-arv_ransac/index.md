@@ -4,7 +4,7 @@ published: 2026-02-27
 draft: false
 toc: true
 tags: ['project']
-description: 'Most of my work for U-M ARV until March 2026. We used, among other techniques, RANSAC and point clouds to segment obstacles from the ground.'
+description: 'Most of my work for U-M ARV until February 2026. We used, among other techniques, RANSAC and point clouds to segment obstacles from the ground.'
 author: 'the2nake, joshua, edison, ryan'
 ---
 
