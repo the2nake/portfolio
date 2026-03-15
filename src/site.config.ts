@@ -59,7 +59,7 @@ const config: SiteConfig = {
     // These will be used to theme the entire site along with syntax highlighting.
     // To use light-dark-auto mode, only include a light and a dark theme in that order.
     include: [
-      'github-light-high-contrast',
+      'min-light',
       'min-dark',
       // 'catppuccin-latte',
       // 'github-dark',
@@ -151,6 +151,15 @@ const config: SiteConfig = {
       //   separator: 'magenta',
       //   link: 'list',
       // },
+      // Heading colors for github-light
+
+      'min-light': {
+        heading3: '#9882C2',
+        heading4: '#9882C2',
+        heading5: '#9882C2',
+        heading6: '#9882C2',
+      },
+
       // Heading colors for min-dark
       'min-dark': {
         heading3: '#fbb',
