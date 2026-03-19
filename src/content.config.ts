@@ -37,6 +37,12 @@ const homeCollection = defineCollection({
     }),
 })
 
+const comingCollection = defineCollection({
+  loader: glob({ pattern: ['coming.md', 'coming.mdx', 'recent.md', 'recent.mdx'], base: './src/content' }),
+  schema: ({ image }) =>
+    z.object({}),
+})
+
 const addendumCollection = defineCollection({
   loader: glob({ pattern: ['addendum.md', 'addendum.mdx'], base: './src/content' }),
   schema: ({ image }) =>
@@ -53,5 +59,6 @@ const addendumCollection = defineCollection({
 export const collections = {
   posts: postsCollection,
   home: homeCollection,
+  coming: comingCollection,
   addendum: addendumCollection,
 }

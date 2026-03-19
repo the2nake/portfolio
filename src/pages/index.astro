@@ -21,6 +21,17 @@ if (home.length > 0) {
   homeAvatarImage = homeEntry.data.avatarImage
   homeGithubCalendar = homeEntry.data.githubCalendar
 }
+
+const coming = await getCollection('coming')
+let ComingContent
+if (coming.length > 0) {
+  ComingContent = (await render(coming[0])).Content
+}
+let RecentContent
+if (coming.length > 1) {
+  RecentContent = (await render(coming[1])).Content
+}
+
 const sortedPosts = await getSortedPosts()
 const postsHaveTags = sortedPosts.some(
   (post) => post.data.tags && post.data.tags.length > 0,
@@ -35,6 +46,24 @@ const postsHaveSeries = sortedPosts.some((post) => post.data.series)
       <HomeBanner avatarImage={homeAvatarImage} githubCalendar={homeGithubCalendar}>
         <HomeContent />
       </HomeBanner>
+    )
+  }
+  {
+    (ComingContent || RecentContent) && (
+      <div class="mt-6 md:mx-2">
+        <div class="flex flex-col sm:flex-row items-center justify-around sm:gap-5 max-w-full">
+          {ComingContent && (
+            <div class:list={['w-1/2 image-only']}>
+              <ComingContent />
+            </div>
+          )}
+          {RecentContent && (
+            <div class:list={['w-1/2 image-only']}>
+              <RecentContent />
+            </div>
+          )}
+        </div>
+      </div>
     )
   }
   {

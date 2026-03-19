@@ -114,6 +114,30 @@ article img {
   }
 }
 
+.image-only {
+  img {
+    @apply mb-5.5;
+  }
+  
+  a {
+    @apply text-link underline hover:underline;
+
+    &.heading-anchor {
+      text-decoration: none;
+      color: inherit;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  & > *:not(div.expressive-code, img, figure, video, hr, blockquote, aside),
+  figcaption {
+    @apply md:mx-2.5;
+  }
+}
+
 .prose {
   @apply text-base/7 text-lg;
 
