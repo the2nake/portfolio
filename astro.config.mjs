@@ -24,12 +24,15 @@ import rehypeKatex from 'rehype-katex' /* again, for latex math support */
 import remarkGemoji from './src/plugins/remark-gemoji' /* for shortcode emoji support */
 import rehypePixelated from './src/plugins/rehype-pixelated' /* Custom plugin to handle pixelated images */
 
+import cloudflare from '@astrojs/cloudflare';
+
 // https://astro.build/config
 export default defineConfig({
   site: siteConfig.site,
   base: siteConfig.base,
   trailingSlash: siteConfig.trailingSlashes ? 'always' : 'never',
   prefetch: true,
+  // adapter: cloudflare(),
   markdown: {
     remarkPlugins: [
       [remarkDescription, { maxChars: 200 }],

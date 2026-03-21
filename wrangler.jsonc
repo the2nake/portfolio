@@ -1,0 +1,7 @@
+{
+  "name": "the2nake-portfolio",
+  "compatibility_date": "2026-03-17", // Update to the day you deploy
+  "assets": {
+    "directory": "./dist"
+  }
+}
