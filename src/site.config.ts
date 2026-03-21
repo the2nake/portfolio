@@ -3,7 +3,7 @@ import type { SiteConfig } from '~/types'
 const config: SiteConfig = {
   // Absolute URL to the root of your published site, used for generating links and sitemaps.
   site: 'https://the2nake.github.io',
-  base: '/portfolio',
+  base: '',
   // The name of your site, used in the title and for SEO.
   title: 'portfolio',
   // The description of your site, used for SEO and RSS feed.
@@ -198,9 +198,9 @@ const config: SiteConfig = {
   // Make sure to compress the image to a web-friendly size (<100kb)
   // Try using the excellent https://squoosh.app web app for creating small webp files
   characters: {
-    owl: '/portfolio/owl.webp',
-    unicorn: '/portfolio/unicorn.webp',
-    duck: '/portfolio/duck.webp',
+    owl: `${(this || {base:""}).base}/owl.webp`,
+    unicorn: `${(this || {base:""}).base}/unicorn.webp`,
+    duck: `${(this || {base:""}).base}/duck.webp`,
   },
 }
 

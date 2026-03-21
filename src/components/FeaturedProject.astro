@@ -9,8 +9,8 @@ interface Props {
 
 const { projectLink, previewImg, siteName } = Astro.props
 
-const imgUrl = `/portfolio/img/projects/${previewImg || ''}`
-const blurUrl = `/portfolio/img/projects/${(previewImg || '').replace(/\.[^/.]+$/, '')}_blur.png`
+const imgUrl = `${siteConfig.base}/img/projects/${previewImg || ''}`
+const blurUrl = `${siteConfig.base}/img/projects/${(previewImg || '').replace(/\.[^/.]+$/, '')}_blur.png`
 ---
 
 <link rel="preload" as="image" href={previewImg ? imgUrl : null} />
@@ -67,7 +67,5 @@ const blurUrl = `/portfolio/img/projects/${(previewImg || '').replace(/\.[^/.]+$
     <span class="project-preview rounded-r">
       <p class="rounded-sm">[{siteName || (projectLink ? 'github' : 'coming soon')}]</p>
     </span>
-
-    <!-- {previewImg && (<img src={`/portfolio/img/projects/${previewImg}`}/>)} -->
   </div>
 </a>
