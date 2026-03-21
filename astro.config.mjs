@@ -24,15 +24,12 @@ import rehypeKatex from 'rehype-katex'/* again, for latex math support */
 import remarkGemoji from './src/plugins/remark-gemoji'/* for shortcode emoji support */
 import rehypePixelated from './src/plugins/rehype-pixelated'/* Custom plugin to handle pixelated images */
 
-import { loadEnv } from "vite";
 import cloudflare from '@astrojs/cloudflare';
-
-const { BASE_URL } = loadEnv(process.env.NODE_ENV || "", process.cwd(), siteConfig.base);
 
 // https://astro.build/config
 export default defineConfig({
   site: siteConfig.site,
-  base: BASE_URL,
+  base: siteConfig.base,
   trailingSlash: siteConfig.trailingSlashes ? 'always' : 'never',
   prefetch: true,
 

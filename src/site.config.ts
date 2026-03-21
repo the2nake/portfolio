@@ -1,9 +1,13 @@
 import type { SiteConfig } from '~/types'
+import { loadEnv } from "vite";
+
+const default_base = "";
+const { BASE_URL } = loadEnv(process.env.NODE_ENV || "", process.cwd(), default_base);
 
 const config: SiteConfig = {
   // Absolute URL to the root of your published site, used for generating links and sitemaps.
   site: 'https://the2nake.github.io',
-  base: '',
+  base: BASE_URL,
   // The name of your site, used in the title and for SEO.
   title: 'portfolio',
   // The description of your site, used for SEO and RSS feed.
