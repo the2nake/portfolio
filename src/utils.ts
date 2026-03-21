@@ -267,7 +267,7 @@ abstract class PostsCollationGroup implements CollationGroup<'posts'> {
       this.collations.push({
         title: collationTitle,
         titleSlug: collationTitleSlug,
-        url: `${this.url}/${encodeURIComponent(collationTitleSlug)}`,
+        url: `${this.url}/${encodeURIComponent(collationTitleSlug)}/`,
         entries: [item],
       })
     }
@@ -290,7 +290,7 @@ export class SeriesGroup extends PostsCollationGroup {
   // Factory method to create a SeriesGroup instance with async data fetching
   static async build(posts?: CollectionEntry<'posts'>[]): Promise<SeriesGroup> {
     const sortedPosts = posts || (await getSortedPosts())
-    const seriesGroup = new SeriesGroup('Series', '/series', [])
+    const seriesGroup = new SeriesGroup('Series', siteConfig.base + '/series', [])
     sortedPosts.forEach((post) => {
       const frontmatterSeries = post.data.series
       if (frontmatterSeries) {
