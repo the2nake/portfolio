@@ -8,7 +8,7 @@ description: 'An optimisation I devised to speed up occupancy grid generation by
 author: 'the2nake'
 ---
 
-Hi, happy Pi Day! This post concerns a way to generate an occupancy grid that is up to 20x faster than using point clouds. If you're reading this and would like some context for why this exists, or what janky method I was using before coming up with this, the latter half of my article on the ARV computer vision pipeline may interest you: [Depth vision for autonomous navigation](./2026_02_27-arv_ransac#occupancy-grid).
+Hi, happy Pi Day! This post concerns a way to generate an occupancy grid that is up to 20x faster than using point clouds. If you're reading this and would like some context for why this exists, or what janky method I was using before coming up with this, the latter half of my article on the ARV computer vision pipeline may interest you: [Depth vision for autonomous navigation](../2026_02_27-arv_ransac/#occupancy-grid).
 
 I just want to preface this post by reiterating that, while using a point cloud to figure out where obstacles are is not unheard of (in fact, I am fairly sure it is common in autonomous navigation), it was definitely the wrong approach in our context.
 

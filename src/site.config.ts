@@ -29,7 +29,7 @@ const config: SiteConfig = {
   // Whether Astro should resolve trailing slashes in URLs or not.
   // This value is used in the astro.config.mjs file and in the "Search" component to make sure pagefind links match this setting.
   // It is not recommended to change this, since most links existing in the site currently do not have trailing slashes.
-  trailingSlashes: false,
+  trailingSlashes: true,
   // The navigation links to display in the header.
   navLinks: [
     {
@@ -38,15 +38,15 @@ const config: SiteConfig = {
     },
     {
       name: 'Projects',
-      url: '/featured'
+      url: '/featured/'
     },
     {
       name: 'Archive',
-      url: '/posts',
+      url: '/posts/',
     },
     {
       name: 'GitHub',
-      url: 'https://github.com/the2nake',
+      url: 'https://github.com/the2nake/',
       external: true,
     },
   ],
